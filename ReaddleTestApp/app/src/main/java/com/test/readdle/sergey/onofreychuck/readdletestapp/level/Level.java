@@ -9,14 +9,23 @@ import java.util.Map;
 public class Level {
 
     private Map<RoomCoordinates, Room> mRooms;
+    private int mWidth;
+    private int mHeight;
 
-    public static Level BuildLevel(List<RoomCoordinates> levelStructure) {
-        LevelBuilder levelBuilder = new LevelBuilder(new Level(), levelStructure);
+    public static Level BuildLevel(List<RoomCoordinates> levelStructure, int width, int height) {
+        LevelBuilder levelBuilder = new LevelBuilder(new Level(width, height), levelStructure);
 
         return levelBuilder.buildLevel();
     }
 
-    private Level(){}
+    private Level(int width, int height) {
+        if (width == 0 || height == 0) {
+            throw new IllegalArgumentException("dimension can be 0. width: " + width + " height: " + height);
+        }
+
+        mWidth = width;
+        mHeight = height;
+    }
 
     public void initializeWithRooms(Map<RoomCoordinates, Room> rooms) {
         if (rooms == null) {
@@ -38,5 +47,13 @@ public class Level {
         }
 
         return mRooms.get(coordinates);
+    }
+
+    public int hetWidth() {
+        return mWidth;
+    }
+
+    public int getHeight() {
+        return mHeight;
     }
 }
