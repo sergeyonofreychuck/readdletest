@@ -1,7 +1,10 @@
 package com.test.readdle.sergey.onofreychuck.readdletestapp.level;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by sergey on 9/26/15.
  */
-public class DeviceDraw {
+public interface ImageSaver {
+    void saveImage(Bitmap image);
 }
