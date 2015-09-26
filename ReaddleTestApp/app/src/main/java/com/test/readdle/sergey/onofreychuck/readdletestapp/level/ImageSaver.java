@@ -6,5 +6,5 @@ import android.graphics.Bitmap;
  * Created by sergey on 9/26/15.
  */
 public interface ImageSaver {
-    void saveImage(Bitmap image);
+    void saveImage(Bitmap image, RoomCoordinates coordinates, Direction direction);
 }

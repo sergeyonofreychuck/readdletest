@@ -7,16 +7,24 @@ import android.graphics.Bitmap;
  */
 public class DeviceCamera extends DeviceAbstract {
 
-    public DeviceCamera(Room currentRoom, Direction direction, Bitmap icon) {
+    private ImageSaver mImageSaver;
+
+    public DeviceCamera(Room currentRoom, Direction direction, Bitmap icon, ImageSaver imageSaver) {
         super(currentRoom, direction, icon);
+
+        if (imageSaver == null) {
+            throw new IllegalArgumentException("imageSaver");
+        }
+
+        mImageSaver = imageSaver;
     }
 
-    public void draw(final Bitmap image){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mRoom.getWall(mDirection).saveImage(image);
-            }
-        }).start();
+    @Override
+    public void positionChanged(){
+
+    }
+
+    public void processImage(final Bitmap image){
+        mImageSaver.saveImage(image, mRoom.getCoordinates(), mDirection);
     }
 }

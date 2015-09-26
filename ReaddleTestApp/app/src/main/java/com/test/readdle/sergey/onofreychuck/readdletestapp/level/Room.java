@@ -9,22 +9,18 @@ import java.util.Map;
 public class Room {
 
     private Map<Direction, Wall> mWalls;
+    private RoomCoordinates mRoomCoordinates;
 
-    public Room(Map<Direction, Wall> walls) {
-
+    public Room(RoomCoordinates coordinates, Map<Direction, Wall> walls) {
+        if (coordinates == null) {
+            throw new IllegalArgumentException("coordinates");
+        }
         if (walls.size() != Direction.getLength()) {
             throw new IllegalArgumentException("walls");
         }
-        
+
+        mRoomCoordinates = coordinates;
         mWalls = new HashMap<>(walls);
-    }
-
-    public Wall getNextWallToRight(Direction direction) {
-        return mWalls.get(direction.getDirectionToRight());
-    }
-
-    public Wall getNextWallToLeft(Direction direction) {
-        return mWalls.get(direction.getDirectionToLeft());
     }
 
     public boolean canGoForward(Direction direction) {
@@ -43,5 +39,9 @@ public class Room {
 
     public Wall getWall(Direction direction) {
         return mWalls.get(direction);
+    }
+
+    public RoomCoordinates getCoordinates(){
+        return mRoomCoordinates;
     }
 }

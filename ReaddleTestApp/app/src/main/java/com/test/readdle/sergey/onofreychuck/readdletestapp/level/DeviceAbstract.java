@@ -9,7 +9,7 @@ public abstract class DeviceAbstract {
 
     protected Room mRoom;
     protected Direction mDirection;
-    private ActionsCallback mActionsCallback;
+    private PositionChangedCallback mPositionCallback;
     private Bitmap mIcon;
 
     public DeviceAbstract(Room currentRoom, Direction direction, Bitmap icon) {
@@ -30,10 +30,12 @@ public abstract class DeviceAbstract {
 
     public void turnLeft() {
         mDirection = mDirection.getDirectionToLeft();
+        positionChanged();
     }
 
     public void turnRight() {
         mDirection = mDirection.getDirectionToRight();
+        positionChanged();
     }
 
     public boolean canDoStepForward() {
@@ -42,14 +44,24 @@ public abstract class DeviceAbstract {
 
     public void stepForward() {
         mRoom = mRoom.goForward(mDirection);
+        positionChanged();
     }
 
-    public void setActionsCallback(ActionsCallback callback) {
-        mActionsCallback = callback;
+    public void positionChanged(){
+        if (mPositionCallback != null) {
+            mPositionCallback.positionChanged(mRoom, mDirection);
+        }
     }
 
-    public interface ActionsCallback {
-        void turned(Direction newDiewction);
-        void positionChanged(Room room);
+    public Bitmap getmIcon() {
+        return mIcon;
+    }
+
+    public void setActionsCallback(PositionChangedCallback callback) {
+        mPositionCallback = callback;
+    }
+
+    public interface PositionChangedCallback {
+        void positionChanged(Room room, Direction direction);
     }
 }

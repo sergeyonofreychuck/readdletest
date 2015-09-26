@@ -1,7 +1,5 @@
 package com.test.readdle.sergey.onofreychuck.readdletestapp.level;
 
-import android.graphics.Bitmap;
-
 import java.util.List;
 import java.util.Map;
 
@@ -12,8 +10,8 @@ public class Level {
 
     private Map<RoomCoordinates, Room> mRooms;
 
-    public static Level BuildLevel(List<RoomCoordinates> levelStructure, ImageStorageFactory imageStorage, Bitmap defaultImage) {
-        LevelBuilder levelBuilder = new LevelBuilder(new Level(), levelStructure, imageStorage, defaultImage);
+    public static Level BuildLevel(List<RoomCoordinates> levelStructure) {
+        LevelBuilder levelBuilder = new LevelBuilder(new Level(), levelStructure);
 
         return levelBuilder.buildLevel();
     }

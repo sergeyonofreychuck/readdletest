@@ -13,18 +13,10 @@ public class LevelBuilder {
 
     private Level mLevel;
     private List<RoomCoordinates> mLevelStructure;
-    private ImageStorageFactory mImageStorageFactory;
-    private Bitmap mDefaultImage;
 
-    public LevelBuilder(Level level, List<RoomCoordinates> levelStructure, ImageStorageFactory imageStorage, Bitmap defaultImage) {
+    public LevelBuilder(Level level, List<RoomCoordinates> levelStructure) {
         if (levelStructure == null) {
             throw new IllegalArgumentException("levelStructure");
-        }
-        if (imageStorage == null) {
-            throw new IllegalArgumentException("imageStorage");
-        }
-        if (defaultImage == null) {
-            throw new IllegalArgumentException("defaultImage");
         }
         if (level == null) {
             throw new IllegalArgumentException("level");
@@ -32,8 +24,6 @@ public class LevelBuilder {
 
         mLevel = level;
         mLevelStructure = levelStructure;
-        mImageStorageFactory = imageStorage;
-        mDefaultImage = defaultImage;
     }
 
     public Level buildLevel(){
@@ -51,14 +41,10 @@ public class LevelBuilder {
         Map<Direction, Wall> walls = new HashMap<>();
         for (final Direction direction : Direction.values()){
             Wall.RoomAfterProvider roomAfterProvider = getRoomAfterProvider(coordinates, direction);
-            walls.put(direction, new Wall(
-                    mImageStorageFactory.getImageProvider(coordinates, direction),
-                    mImageStorageFactory.getImageSaver(coordinates, direction),
-                    roomAfterProvider,
-                    mDefaultImage));
+            walls.put(direction, new Wall(roomAfterProvider));
         }
 
-        return new Room(walls);
+        return new Room(coordinates, walls);
     }
 
     //Can return null
