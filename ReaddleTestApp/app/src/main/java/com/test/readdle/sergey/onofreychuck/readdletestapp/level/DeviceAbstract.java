@@ -5,6 +5,9 @@ import android.util.Log;
 
 import com.test.readdle.sergey.onofreychuck.readdletestapp.widgets.Trackable;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by sergey on 9/26/15.
  */
@@ -15,22 +18,25 @@ public abstract class DeviceAbstract implements Trackable {
     protected Room mRoom;
     protected Direction mDirection;
     private PositionChangedCallback mPositionCallback;
-    private Bitmap mIcon;
+    private Map<Direction,Bitmap> mIcons;
 
-    public DeviceAbstract(Room currentRoom, Direction direction, Bitmap icon) {
+    public DeviceAbstract(Room currentRoom, Direction direction, Map<Direction,Bitmap> icons) {
         if (currentRoom == null){
             throw new IllegalArgumentException("location");
         }
         if (direction == null) {
             throw new IllegalArgumentException("direction");
         }
-        if (icon == null) {
-            throw new IllegalArgumentException("icon");
+        if (icons == null) {
+            throw new IllegalArgumentException("icons");
+        }
+        if (icons.size() != Direction.getLength()) {
+            throw new IllegalArgumentException("icons. invalid directions");
         }
 
         mRoom = currentRoom;
         mDirection = direction;
-        mIcon = icon;
+        mIcons = new HashMap<>(icons);
     }
 
     public void turnLeft() {
@@ -62,7 +68,7 @@ public abstract class DeviceAbstract implements Trackable {
     }
 
     public Bitmap getIcon() {
-        return mIcon;
+        return mIcons.get(mDirection);
     }
 
     @Override

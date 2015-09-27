@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 
 import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.ImageSaver;
 
+import java.util.Map;
+
 /**
  * Created by sergey on 9/26/15.
  */
@@ -11,8 +13,8 @@ public class DeviceCamera extends DeviceAbstract {
 
     private ImageSaver mImageSaver;
 
-    public DeviceCamera(Room currentRoom, Direction direction, Bitmap icon, ImageSaver imageSaver) {
-        super(currentRoom, direction, icon);
+    public DeviceCamera(Room currentRoom, Direction direction, Map<Direction,Bitmap> icons, ImageSaver imageSaver) {
+        super(currentRoom, direction, icons);
 
         if (imageSaver == null) {
             throw new IllegalArgumentException("imageSaver");

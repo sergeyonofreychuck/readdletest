@@ -1,8 +1,10 @@
 package com.test.readdle.sergey.onofreychuck.readdletestapp.widgets;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -121,11 +123,20 @@ public class MiniMap extends View {
                 Rect currentCellBounds = mTranslator.getBouds(coordinates.getX(), coordinates.getY());
 
                 if (mTrackedObject != null && coordinates.equals(mTrackedObject.getPosition())) {
-                    canvas.drawBitmap(mTrackedObject.getIcon(), currentCellBounds.left, currentCellBounds.top, null);
-                }
+                    Bitmap icon = mTrackedObject.getIcon();
 
-                mRoomDrawable.setBounds(mTranslator.getBouds(coordinates.getX(), coordinates.getY()));
-                mRoomDrawable.draw(canvas);
+                    float scaleX = (float)currentCellBounds.width()/(float)icon.getWidth();
+                    float scaleY = (float)currentCellBounds.height()/(float)icon.getHeight();
+
+                    Matrix transformMatrix = new Matrix();
+                    transformMatrix.postScale(scaleX, scaleY);
+                    transformMatrix.postTranslate(currentCellBounds.left, currentCellBounds.top);
+
+                    canvas.drawBitmap(icon, transformMatrix, null);
+                } else {
+                    mRoomDrawable.setBounds(mTranslator.getBouds(coordinates.getX(), coordinates.getY()));
+                    mRoomDrawable.draw(canvas);
+                }
             }
         }
     }

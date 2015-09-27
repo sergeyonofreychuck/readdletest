@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 
 import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.ImageProvider;
 
+import java.util.Map;
+
 /**
  * Created by sergey on 9/26/15.
  */
@@ -13,8 +15,8 @@ abstract public class DeviceDisplay extends DeviceAbstract {
     private Bitmap mDefaultBitmap;
     ImageProvider.GetImageCallback mGetImageCallback;
 
-    public DeviceDisplay(Room currentRoom, Direction direction, Bitmap icon, ImageProvider imageProvider, Bitmap defaultBitmap) {
-        super(currentRoom, direction, icon);
+    public DeviceDisplay(Room currentRoom, Direction direction, Map<Direction,Bitmap> icons, ImageProvider imageProvider, Bitmap defaultBitmap) {
+        super(currentRoom, direction, icons);
 
         if (imageProvider == null) {
             throw new IllegalArgumentException("imageProvider");

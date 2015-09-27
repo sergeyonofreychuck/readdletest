@@ -2,7 +2,6 @@ package com.test.readdle.sergey.onofreychuck.readdletestapp;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.opengl.GLES10;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -10,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.test.readdle.sergey.onofreychuck.readdletestapp.level.DeviceAbstract;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.DeviceDisplay;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.Direction;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.Level;
@@ -24,7 +22,9 @@ import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.LevelStructur
 import com.test.readdle.sergey.onofreychuck.readdletestapp.widgets.MiniMap;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -77,8 +77,15 @@ public class MainAppFragment extends Fragment {
 
     private void initializeDisplay(Level level) {
         Room room = level.getRoom(new RoomCoordinates(1, 1));
-        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.arrow);
-        Bitmap defaultImage = BitmapFactory.decodeResource(getResources(), R.drawable.arrow);
+
+        Map<Direction, Bitmap> icons = new HashMap<>();
+        icons.put(Direction.EAST, BitmapFactory.decodeResource(getResources(), R.drawable.arrow_east));
+        icons.put(Direction.SOUTH, BitmapFactory.decodeResource(getResources(), R.drawable.arrow_south));
+        icons.put(Direction.WEST, BitmapFactory.decodeResource(getResources(), R.drawable.arrow_west));
+        icons.put(Direction.NORTH, BitmapFactory.decodeResource(getResources(), R.drawable.arrow_noth));
+
+        Bitmap defaultImage = BitmapFactory.decodeResource(getResources(), R.drawable.arrow_west);
+
         ImageFileNameProvider imageFileNameProvider =
                 new ImageFileNameProvider(getContext().getExternalFilesDir(android.os.Environment.DIRECTORY_PICTURES).getAbsolutePath());
         ImageProvider imageProvider = new FilesImageProvider(imageFileNameProvider);
@@ -86,7 +93,7 @@ public class MainAppFragment extends Fragment {
         mDisplay = new DeviceDisplay(
                 room,
                 Direction.NORTH,
-                icon,
+                icons,
                 imageProvider,
                 defaultImage) {
 

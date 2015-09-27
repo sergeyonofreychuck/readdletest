@@ -4,9 +4,9 @@ package com.test.readdle.sergey.onofreychuck.readdletestapp.level;
  * Created by sergey on 9/26/15.
  */
 public enum Direction {
-    SOUTH (0, -1),
+    SOUTH (0, 1),
     WEST (-1, 0),
-    NORTH (0, 1),
+    NORTH (0, -1),
     EAST (1, 0);
 
     private static int mLength = values().length;
