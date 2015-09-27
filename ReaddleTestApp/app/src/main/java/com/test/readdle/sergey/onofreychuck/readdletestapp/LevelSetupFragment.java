@@ -12,19 +12,18 @@ import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.LevelStructur
 import com.test.readdle.sergey.onofreychuck.readdletestapp.widgets.MiniMap;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class AppRootFragment extends Fragment {
+public class LevelSetupFragment extends Fragment {
 
     MiniMap mMiniMap;
     List<RoomCoordinates> mRooms;
     LevelStructureStorage mLevelStructureStorage;
 
-    public AppRootFragment() {
+    public LevelSetupFragment() {
     }
 
     @Override
@@ -52,7 +51,7 @@ public class AppRootFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_app_root, container, false);
+        return inflater.inflate(R.layout.level_setup, container, false);
     }
 
     @Override
