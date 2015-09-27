@@ -8,8 +8,10 @@ import com.test.readdle.sergey.onofreychuck.readdletestapp.level.Direction;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.RoomCoordinates;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
@@ -30,31 +32,34 @@ public class FilesImageSaver implements ImageSaver {
     }
 
     @Override
-    public void saveImage(Bitmap image, RoomCoordinates coordinates, Direction direction, SaveImageCallback callback) {
+    public void saveImage(File imageTempFile, RoomCoordinates coordinates, Direction direction, SaveImageCallback callback) {
         File imageFile = mFileNameProvider.getImageFile(coordinates, direction);
 
-        new SaveTask(imageFile, image, callback).execute();
+        new SaveTask(imageFile, imageTempFile, callback).execute();
     }
 
     private class SaveTask extends AsyncTask<Void, Void, Void> {
 
         private File mImageFile;
-        private Bitmap mImage;
+        private File mImageTempFile;
         private SaveImageCallback mCallback;
 
-        public SaveTask(File imageFile, Bitmap image, SaveImageCallback callback) {
+        public SaveTask(File imageFile, File imageTempFile, SaveImageCallback callback) {
             if (imageFile == null) {
                 throw new IllegalArgumentException("imageFile");
             }
-            if (image == null) {
-                throw new IllegalArgumentException("image");
+            if (imageTempFile == null) {
+                throw new IllegalArgumentException("imageTempFile");
+            }
+            if (!imageTempFile.exists()) {
+                throw new IllegalArgumentException("image file not exists");
             }
             if (callback == null) {
                 throw new IllegalArgumentException("callback");
             }
 
             mImageFile = imageFile;
-            mImage = image;
+            mImageTempFile = imageTempFile;
             mCallback = callback;
         }
 
@@ -65,12 +70,9 @@ public class FilesImageSaver implements ImageSaver {
             }
 
             try {
-                OutputStream out = new FileOutputStream(mImageFile);
-                mImage.compress(Bitmap.CompressFormat.JPEG, 85, out); // saving the Bitmap to a file compressed as a JPEG with 85% compression rate
-                out.flush();
-                out.close(); // do not forget to close the stream
-            } catch (IOException ioe) {
-                Log.e(TAG, "exception saving image to file: " + mImageFile.getAbsolutePath(), ioe);
+                copy(mImageTempFile, mImageFile);
+            } catch (IOException e) {
+                Log.e(TAG, "error copy file.", e);
                 cancel(false);
             }
 
@@ -85,6 +87,23 @@ public class FilesImageSaver implements ImageSaver {
         @Override
         protected void onPostExecute(Void result) {
             mCallback.success();
+        }
+
+        public void copy(File src, File dst) throws IOException {
+            InputStream in = new FileInputStream(src);
+            OutputStream out = new FileOutputStream(dst);
+
+            try {
+                // Transfer bytes from in to out
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+            } finally {
+                in.close();
+                out.close();
+            }
         }
     }
 }

@@ -1,9 +1,15 @@
 package com.test.readdle.sergey.onofreychuck.readdletestapp;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.text.method.MetaKeyKeyListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,10 +27,15 @@ import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.LevelStructur
 import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.LevelStructureStorage;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.widgets.MiniMap;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 
 /**
@@ -106,6 +117,11 @@ public class MainAppFragment extends Fragment {
         mDisplay.start();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     private void initializeButtonsListeners() {
         getView().findViewById(R.id.btn_forward).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,6 +143,12 @@ public class MainAppFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mDisplay.turnRight();
+            }
+        });
+
+        getView().findViewById(R.id.btn_loadImage).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
             }
         });
     }
