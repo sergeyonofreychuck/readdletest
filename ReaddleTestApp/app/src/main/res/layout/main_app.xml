@@ -26,11 +26,21 @@
         >
 
         <Button
+            android:id="@+id/btn_loadImage"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="8dp"
+            android:text="load image"
+            android:background="@color/main"
+            />
+
+        <Button
             android:id="@+id/btn_forward"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             android:text="step forward"
             android:background="@color/main"
             />
@@ -49,7 +59,7 @@
                 android:layout_weight="1"
                 android:text="left"
                 android:background="@color/main"
-                android:layout_marginRight="16dp"
+                android:layout_marginRight="8dp"
                 android:layout_marginBottom="16dp"
                 />
             <Button
