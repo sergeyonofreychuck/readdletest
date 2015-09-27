@@ -2,6 +2,8 @@ package com.test.readdle.sergey.onofreychuck.readdletestapp.level;
 
 import android.graphics.Bitmap;
 
+import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.ImageSaver;
+
 /**
  * Created by sergey on 9/26/15.
  */

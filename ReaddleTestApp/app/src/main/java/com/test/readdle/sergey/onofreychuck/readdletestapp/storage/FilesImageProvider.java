@@ -1,8 +1,11 @@
-package com.test.readdle.sergey.onofreychuck.readdletestapp.level;
+package com.test.readdle.sergey.onofreychuck.readdletestapp.storage;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+
+import com.test.readdle.sergey.onofreychuck.readdletestapp.level.Direction;
+import com.test.readdle.sergey.onofreychuck.readdletestapp.level.RoomCoordinates;
 
 import java.io.File;
 
