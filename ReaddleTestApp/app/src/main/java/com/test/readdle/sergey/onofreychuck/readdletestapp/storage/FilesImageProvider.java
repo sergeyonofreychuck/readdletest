@@ -3,6 +3,7 @@ package com.test.readdle.sergey.onofreychuck.readdletestapp.storage;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.Direction;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.RoomCoordinates;
@@ -29,9 +30,11 @@ public class FilesImageProvider implements ImageProvider {
 
     @Override
     public void tryGetImage(RoomCoordinates coordinates, Direction direction, GetImageCallback callback) {
+        Log.d(TAG, "try get image: " + coordinates + "   " + direction);
+
         File imageFile = mFileNameProvider.getImageFile(coordinates, direction);
 
-        new LoaderTask(imageFile, callback);
+        new LoaderTask(imageFile, callback).execute();
     }
 
     private class LoaderTask extends AsyncTask<Void, Void, Bitmap> {
@@ -55,13 +58,16 @@ public class FilesImageProvider implements ImageProvider {
         protected Bitmap doInBackground(Void... params) {
             if (!mImageFile.exists()) {
                 cancel(false);
+                return null;
             }
 
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
             Bitmap bitmap = BitmapFactory.decodeFile(mImageFile.getAbsolutePath(), options);
             if(bitmap == null) {
+                Log.d(TAG, "bitmap null, cancel");
                 cancel(false);
+                return null;
             }
 
             return bitmap;
@@ -69,11 +75,13 @@ public class FilesImageProvider implements ImageProvider {
 
         @Override
         protected void onCancelled() {
+            Log.d(TAG, "onCancelled");
             mCallback.notLoaded();
         }
 
         @Override
         protected void onPostExecute(Bitmap result) {
+            Log.d(TAG, "onPostExecute");
             mCallback.success(result);
         }
     }
