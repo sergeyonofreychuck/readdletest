@@ -21,11 +21,6 @@ public class DeviceCamera extends DeviceAbstract {
         mImageSaver = imageSaver;
     }
 
-    @Override
-    public void positionChanged(){
-
-    }
-
     public void processImage(final Bitmap image){
         mImageSaver.saveImage(image, mRoom.getCoordinates(), mDirection, new ImageSaver.SaveImageCallback() {
             @Override

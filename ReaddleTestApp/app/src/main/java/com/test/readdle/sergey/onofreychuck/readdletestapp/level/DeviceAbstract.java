@@ -1,11 +1,16 @@
 package com.test.readdle.sergey.onofreychuck.readdletestapp.level;
 
 import android.graphics.Bitmap;
+import android.util.Log;
+
+import com.test.readdle.sergey.onofreychuck.readdletestapp.widgets.Trackable;
 
 /**
  * Created by sergey on 9/26/15.
  */
-public abstract class DeviceAbstract {
+public abstract class DeviceAbstract implements Trackable {
+
+    private final String TAG = getClass().getSimpleName();
 
     protected Room mRoom;
     protected Direction mDirection;
@@ -29,11 +34,13 @@ public abstract class DeviceAbstract {
     }
 
     public void turnLeft() {
+        Log.d(TAG, "turn left");
         mDirection = mDirection.getDirectionToLeft();
         positionChanged();
     }
 
     public void turnRight() {
+        Log.d(TAG, "turn right");
         mDirection = mDirection.getDirectionToRight();
         positionChanged();
     }
@@ -43,6 +50,7 @@ public abstract class DeviceAbstract {
     }
 
     public void stepForward() {
+        Log.d(TAG, "step forward");
         mRoom = mRoom.goForward(mDirection);
         positionChanged();
     }
@@ -53,12 +61,23 @@ public abstract class DeviceAbstract {
         }
     }
 
-    public Bitmap getmIcon() {
+    public Bitmap getIcon() {
         return mIcon;
     }
 
+    @Override
     public void setActionsCallback(PositionChangedCallback callback) {
         mPositionCallback = callback;
+    }
+
+    @Override
+    public RoomCoordinates getPosition() {
+        return mRoom.getCoordinates();
+    }
+
+    @Override
+    public Direction getDirection() {
+        return mDirection;
     }
 
     public interface PositionChangedCallback {

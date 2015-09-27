@@ -25,10 +25,13 @@ import java.util.List;
  * Created by sergey on 9/26/15.
  */
 public class MiniMap extends View {
+
+    private static final String TAG = "MiniMap";
+
     private int mRows;
     private int mColumns;
     private List<RoomCoordinates> mRooms;
-    private DeviceAbstract mDevice;
+    private Trackable mTrackedObject;
     private Paint mPaint = new Paint();
     private Drawable mRoomDrawable;
     private MiniMapOnTouchListener mOnTouchListener;
@@ -88,16 +91,12 @@ public class MiniMap extends View {
         invalidate();
     }
 
-    public void setDevice(DeviceAbstract device) {
-        if (device == null) {
-            throw new IllegalArgumentException("device");
-        }
-
-        mDevice = device;
-
-        device.setActionsCallback(new DeviceAbstract.PositionChangedCallback() {
+    public void setTrackedObject(Trackable trackedObject){
+        mTrackedObject = trackedObject;
+        mTrackedObject.setActionsCallback(new DeviceAbstract.PositionChangedCallback() {
             @Override
             public void positionChanged(Room room, Direction direction) {
+                Log.d(TAG, "tracked position changed: " + room.getCoordinates() + "   " + direction);
                 invalidate();
             }
         });
@@ -119,6 +118,12 @@ public class MiniMap extends View {
 
         if (mRooms != null) {
             for (RoomCoordinates coordinates : mRooms){
+                Rect currentCellBounds = mTranslator.getBouds(coordinates.getX(), coordinates.getY());
+
+                if (mTrackedObject != null && coordinates.equals(mTrackedObject.getPosition())) {
+                    canvas.drawBitmap(mTrackedObject.getIcon(), currentCellBounds.left, currentCellBounds.top, null);
+                }
+
                 mRoomDrawable.setBounds(mTranslator.getBouds(coordinates.getX(), coordinates.getY()));
                 mRoomDrawable.draw(canvas);
             }

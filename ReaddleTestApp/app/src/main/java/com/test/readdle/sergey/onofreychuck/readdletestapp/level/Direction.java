@@ -24,17 +24,17 @@ public enum Direction {
     }
 
     public Direction getDirectionToRight(){
-        if (ordinal() == 0) {
-            return values()[mLength - 1];
-        }
-        return values()[ordinal() - 1];
-    }
-
-    public Direction getDirectionToLeft(){
         if (ordinal() == mLength - 1) {
             return values()[0];
         }
         return values()[ordinal() + 1];
+    }
+
+    public Direction getDirectionToLeft(){
+        if (ordinal() == 0) {
+            return values()[mLength - 1];
+        }
+        return values()[ordinal() - 1];
     }
 
     public RoomCoordinates getNextRoomLoacation(RoomCoordinates coordinates) {

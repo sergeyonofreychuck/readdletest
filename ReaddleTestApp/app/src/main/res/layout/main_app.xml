@@ -26,6 +26,7 @@
         >
 
         <Button
+            android:id="@+id/btn_forward"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -35,7 +36,6 @@
             />
 
         <LinearLayout
-            android:id="@+id/rotate_buttons"
             android:layout_width="match_parent"
             android:layout_height="16dp"
             android:layout_weight="1"
@@ -43,6 +43,7 @@
             >
 
             <Button
+                android:id="@+id/btn_turn_left"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -52,6 +53,7 @@
                 android:layout_marginBottom="16dp"
                 />
             <Button
+                android:id="@+id/btn_turn_right"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

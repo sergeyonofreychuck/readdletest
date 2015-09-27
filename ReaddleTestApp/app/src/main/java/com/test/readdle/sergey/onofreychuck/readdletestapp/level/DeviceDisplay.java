@@ -41,8 +41,13 @@ abstract public class DeviceDisplay extends DeviceAbstract {
 
     @Override
     public void positionChanged(){
+        super.positionChanged();
         mImageProvider.tryGetImage(mRoom.getCoordinates(), mDirection, mGetImageCallback);
     }
 
-    abstract void process(Bitmap image);
+    public void start() {
+        positionChanged();
+    }
+
+    public abstract void process(Bitmap image);
 }
