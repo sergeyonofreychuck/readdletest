@@ -1,20 +1,20 @@
 package com.test.readdle.sergey.onofreychuck.readdletestapp.level;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by sergey on 9/26/15.
  */
 public class RoomCoordinates {
 
-    private int mHashCode;
-
+    @SerializedName("x")
     private int mX;
+    @SerializedName("y")
     private int mY;
 
     public RoomCoordinates(int x, int y) {
         mX = x;
         mY = y;
-
-        mHashCode = new Integer(mX).hashCode() ^ new Integer(mY);
     }
 
     public int getX() {
@@ -27,7 +27,7 @@ public class RoomCoordinates {
 
     @Override
     public int hashCode() {
-        return mHashCode;
+        return new Integer(mX).hashCode() ^ new Integer(mY);
     }
 
     @Override

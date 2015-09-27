@@ -1,19 +1,35 @@
 package com.test.readdle.sergey.onofreychuck.readdletestapp.storage;
 
+import com.test.readdle.sergey.onofreychuck.readdletestapp.level.RoomCoordinates;
+
+import java.util.List;
+
 /**
  * Created by sergey on 9/27/15.
  */
 public interface LevelStructureStorage {
 
-    void save(LevelStructureDO levelStructureDO, SaveStorageCallback storageCallback);
-    void load(LoadStorageCallback callback);
+    SaveCallback EMPTY_CALLBACK = new SaveCallback() {
+        @Override
+        public void success() {
 
-    interface SaveStorageCallback {
+        }
+
+        @Override
+        public void failed() {
+            throw new RuntimeException("failed saving level structure");
+        }
+    } ;
+
+    void save(String id, List<RoomCoordinates> coordinates, SaveCallback storageCallback);
+    void load(String id,LoadCallback callback);
+
+    interface SaveCallback {
         void success();
         void failed();
     }
-    interface LoadStorageCallback {
-        void success(LevelStructureDO levelStructureDO);
+    interface LoadCallback {
+        void success(List<RoomCoordinates> coordinates);
         void failed();
     }
 }
