@@ -1,4 +1,4 @@
-package com.test.readdle.sergey.onofreychuck.readdletestapp.widgets;
+package com.test.readdle.sergey.onofreychuck.readdletestapp.level;
 
 import android.graphics.Bitmap;
 
@@ -11,7 +11,7 @@ import com.test.readdle.sergey.onofreychuck.readdletestapp.level.RoomCoordinates
  */
 public interface Trackable {
     void setActionsCallback(DeviceAbstract.PositionChangedCallback callback);
-    RoomCoordinates getPosition();
+    Room getRoom();
     Direction getDirection();
     Bitmap getIcon();
 

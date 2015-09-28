@@ -16,9 +16,9 @@ import android.view.View;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.R;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.DeviceAbstract;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.Direction;
-import com.test.readdle.sergey.onofreychuck.readdletestapp.level.Level;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.Room;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.RoomCoordinates;
+import com.test.readdle.sergey.onofreychuck.readdletestapp.level.Trackable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,7 +122,7 @@ public class MiniMap extends View {
             for (RoomCoordinates coordinates : mRooms){
                 Rect currentCellBounds = mTranslator.getBouds(coordinates.getX(), coordinates.getY());
 
-                if (mTrackedObject != null && coordinates.equals(mTrackedObject.getPosition())) {
+                if (mTrackedObject != null && coordinates.equals(mTrackedObject.getRoom().getCoordinates())) {
                     Bitmap icon = mTrackedObject.getIcon();
 
                     float scaleX = (float)currentCellBounds.width()/(float)icon.getWidth();
@@ -139,12 +139,6 @@ public class MiniMap extends View {
                 }
             }
         }
-    }
-
-    public interface LevelDataProvider {
-        List<RoomCoordinates> getRoomsCoordinates();
-        int getColumns();
-        int getRows();
     }
 
     public interface MiniMapOnTouchListener {

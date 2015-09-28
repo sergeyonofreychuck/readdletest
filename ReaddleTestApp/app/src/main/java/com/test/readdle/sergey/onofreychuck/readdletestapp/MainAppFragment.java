@@ -1,42 +1,35 @@
 package com.test.readdle.sergey.onofreychuck.readdletestapp;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.text.method.MetaKeyKeyListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.test.readdle.sergey.onofreychuck.readdletestapp.level.DeviceCamera;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.DeviceDisplay;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.Direction;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.Level;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.Room;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.RoomCoordinates;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.FilesImageProvider;
+import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.FilesImageSaver;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.ImageFileNameProvider;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.ImageProvider;
+import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.ImageSaver;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.LevelStructureFileStorage;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.LevelStructureStorage;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.widgets.MiniMap;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-
 
 /**
  * Created by sergey on 9/27/15.
@@ -45,6 +38,8 @@ public class MainAppFragment extends Fragment {
 
     private Level mLevel;
     private DeviceDisplay mDisplay;
+    private DeviceCamera mCamera;
+    private ImageView mImageViewDisplay;
 
     public MainAppFragment() {
     }
@@ -67,12 +62,14 @@ public class MainAppFragment extends Fragment {
         final MiniMap miniMap = (MiniMap) getView().findViewById(R.id.mini_map);
         miniMap.initGrid(Globals.LEVEL_X_DIMENSION, Globals.LEVEL_Y_DIMENSION);
 
+        mImageViewDisplay = (ImageView)getView().findViewById(R.id.img_display);
+
         new LevelStructureFileStorage(getContext()).load(Globals.LEVEL_SAVE_KEY, new LevelStructureStorage.LoadCallback() {
             @Override
             public void success(List<RoomCoordinates> coordinates) {
                 mLevel = Level.BuildLevel(coordinates, Globals.LEVEL_X_DIMENSION, Globals.LEVEL_Y_DIMENSION);
                 miniMap.setRooms(new ArrayList<>(coordinates));
-                initializeDisplay(mLevel);
+                initializeDevices(mLevel);
                 miniMap.setTrackedObject(mDisplay);
                 initializeButtonsListeners();
             }
@@ -82,12 +79,10 @@ public class MainAppFragment extends Fragment {
                 //TODO handle errors
             }
         });
-
-
     }
 
-    private void initializeDisplay(Level level) {
-        Room room = level.getRoom(new RoomCoordinates(1, 1));
+    private void initializeDevices(Level level) {
+        Room startRoom = level.getRoom(new RoomCoordinates(1, 1)); //FIXME
 
         Map<Direction, Bitmap> icons = new HashMap<>();
         icons.put(Direction.EAST, BitmapFactory.decodeResource(getResources(), R.drawable.arrow_east));
@@ -95,10 +90,17 @@ public class MainAppFragment extends Fragment {
         icons.put(Direction.WEST, BitmapFactory.decodeResource(getResources(), R.drawable.arrow_west));
         icons.put(Direction.NORTH, BitmapFactory.decodeResource(getResources(), R.drawable.arrow_noth));
 
-        Bitmap defaultImage = BitmapFactory.decodeResource(getResources(), R.drawable.arrow_west);
-
         ImageFileNameProvider imageFileNameProvider =
                 new ImageFileNameProvider(getContext().getExternalFilesDir(android.os.Environment.DIRECTORY_PICTURES).getAbsolutePath());
+
+        initializeDisplay(startRoom, imageFileNameProvider, icons);
+
+        initializeCamera(startRoom, imageFileNameProvider, icons);
+    }
+
+    private void initializeDisplay(Room room, ImageFileNameProvider imageFileNameProvider, Map<Direction, Bitmap> icons) {
+        Bitmap defaultImage = BitmapFactory.decodeResource(getResources(), R.drawable.no_image_available);
+
         ImageProvider imageProvider = new FilesImageProvider(imageFileNameProvider);
 
         mDisplay = new DeviceDisplay(
@@ -110,6 +112,7 @@ public class MainAppFragment extends Fragment {
 
             @Override
             public void process(Bitmap image) {
+                mImageViewDisplay.setImageBitmap(image);
                 Log.e("zzzzzzzzzzzzzzzz", "process bitmap");
             }
         };
@@ -117,9 +120,15 @@ public class MainAppFragment extends Fragment {
         mDisplay.start();
     }
 
+    private void initializeCamera(Room room, ImageFileNameProvider imageFileNameProvider, Map<Direction, Bitmap> icons) {
+        ImageSaver imageSaver = new FilesImageSaver(imageFileNameProvider);
+        mCamera = new DeviceCamera(getActivity(), room, Direction.NORTH, icons, imageSaver);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        mCamera.processActivityForResult(requestCode, resultCode);
     }
 
     private void initializeButtonsListeners() {
@@ -149,6 +158,8 @@ public class MainAppFragment extends Fragment {
         getView().findViewById(R.id.btn_loadImage).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mCamera.moveTo(mDisplay);
+                mCamera.makePhoto();
             }
         });
     }

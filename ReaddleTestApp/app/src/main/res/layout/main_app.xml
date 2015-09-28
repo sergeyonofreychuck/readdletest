@@ -5,6 +5,17 @@
     android:paddingRight="16dp"
     style="@style/ThemeOverlay.AppCompat.Dark">
 
+    <ImageView
+        android:id="@+id/img_display"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerInside"
+        android:layout_above="@id/mini_map"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/no_image_available"
+        />
+
     <com.test.readdle.sergey.onofreychuck.readdletestapp.widgets.MiniMap
         android:id="@+id/mini_map"
         android:layout_width="150dp"

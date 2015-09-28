@@ -3,8 +3,6 @@ package com.test.readdle.sergey.onofreychuck.readdletestapp.level;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.test.readdle.sergey.onofreychuck.readdletestapp.widgets.Trackable;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,6 +65,13 @@ public abstract class DeviceAbstract implements Trackable {
         }
     }
 
+    public void moveTo(Trackable trackable) {
+        mRoom = trackable.getRoom();
+        mDirection = trackable.getDirection();
+        positionChanged();
+    }
+
+    @Override
     public Bitmap getIcon() {
         return mIcons.get(mDirection);
     }
@@ -77,8 +82,8 @@ public abstract class DeviceAbstract implements Trackable {
     }
 
     @Override
-    public RoomCoordinates getPosition() {
-        return mRoom.getCoordinates();
+    public Room getRoom() {
+        return mRoom;
     }
 
     @Override
