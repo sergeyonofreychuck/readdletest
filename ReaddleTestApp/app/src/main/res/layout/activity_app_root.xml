@@ -1,6 +1,5 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical">
@@ -18,11 +17,12 @@
 
         <fragment
             xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/fragment"
+            android:id="@+id/main_app_fragment"
             android:name="com.test.readdle.sergey.onofreychuck.readdletestapp.MainAppFragment"
             tools:layout="@layout/level_setup"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:tag="@string/main_fragment_tag"/>
 
     </FrameLayout>
 </LinearLayout>

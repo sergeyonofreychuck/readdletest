@@ -7,7 +7,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class AppRoot extends AppCompatActivity {
+import com.test.readdle.sergey.onofreychuck.readdletestapp.level.RoomCoordinates;
+
+import java.util.List;
+
+/**
+ * Created by sergey on 9/27/15.
+ */
+public class AppRoot extends AppCompatActivity implements ConfigurationChangedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,5 +51,11 @@ public class AppRoot extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onConfigurationChanged(List<RoomCoordinates> rooms) {
+        MainAppFragment mainFragment = (MainAppFragment)getSupportFragmentManager().findFragmentById(R.id.main_app_fragment);
+        mainFragment.onConfigurationChanged(rooms);
     }
 }

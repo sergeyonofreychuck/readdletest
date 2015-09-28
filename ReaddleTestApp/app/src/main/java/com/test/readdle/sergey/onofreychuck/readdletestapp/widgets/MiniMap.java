@@ -141,6 +141,11 @@ public class MiniMap extends View {
         }
     }
 
+    @Override
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, widthMeasureSpec);
+    }
+
     public interface MiniMapOnTouchListener {
         void onTouch(RoomCoordinates coordinates);
     }

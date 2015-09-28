@@ -2,4 +2,6 @@
     <string name="app_name">ReaddleTestApp</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Location Setup</string>
+
+    <string name="main_fragment_tag">main_app</string>
 </resources>

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -38,7 +39,6 @@ import java.util.Map;
  */
 public class MainAppFragment extends Fragment {
 
-    private Level mLevel;
     private DeviceDisplay mDisplay;
     private DeviceCamera mCamera;
     private ImageView mImageViewDisplay;
@@ -56,45 +56,56 @@ public class MainAppFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.main_app, container, false);
-    }
+        View rootView = inflater.inflate(R.layout.main_app, container, false);
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        menu.clear();
-        menuInflater.inflate(R.menu.menu_app_root, menu);
-    }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        final MiniMap miniMap = (MiniMap) getView().findViewById(R.id.mini_map);
+        final MiniMap miniMap = (MiniMap) rootView.findViewById(R.id.mini_map);
         miniMap.initGrid(Globals.LEVEL_X_DIMENSION, Globals.LEVEL_Y_DIMENSION);
 
-        mImageViewDisplay = (ImageView)getView().findViewById(R.id.img_display);
+        mImageViewDisplay = (ImageView)rootView.findViewById(R.id.img_display);
 
         new LevelStructureFileStorage(getContext()).load(Globals.LEVEL_SAVE_KEY, new LevelStructureStorage.LoadCallback() {
             @Override
             public void success(List<RoomCoordinates> coordinates) {
-                mLevel = Level.BuildLevel(coordinates, Globals.LEVEL_X_DIMENSION, Globals.LEVEL_Y_DIMENSION);
-                miniMap.setRooms(new ArrayList<>(coordinates));
-                initializeDevices(mLevel);
-                miniMap.setTrackedObject(mDisplay);
+                initializeLevel(coordinates, coordinates.get(coordinates.size() - 1), Globals.DEFAULT_DEVICE_DIRECTION);
                 initializeButtonsListeners();
             }
 
             @Override
             public void failed() {
+                throw new RuntimeException("failed loading level structure");
                 //TODO handle errors
             }
         });
+        return rootView;
     }
 
-    private void initializeDevices(Level level) {
-        Room startRoom = level.getRoom(new RoomCoordinates(1, 1)); //FIXME
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        menu.clear();
+        menuInflater.inflate(R.menu.menu_app_root, menu);
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mCamera.processActivityForResult(requestCode, resultCode);
+    }
+
+    public void onConfigurationChanged(List<RoomCoordinates> rooms) {
+        initializeLevel(rooms, mDisplay.getRoom().getCoordinates(), mDisplay.getDirection());
+    }
+
+    public void initializeLevel(List<RoomCoordinates> coordinates, RoomCoordinates startCoordinates, Direction startDirection){
+        final MiniMap miniMap = (MiniMap) getView().findViewById(R.id.mini_map);
+        Level level = Level.BuildLevel(coordinates, Globals.LEVEL_X_DIMENSION, Globals.LEVEL_Y_DIMENSION);
+        miniMap.setRooms(new ArrayList<>(coordinates));
+        Room startRoom = level.getRoom(startCoordinates);
+        initializeDevices(startRoom, startDirection);
+        miniMap.setTrackedObject(mDisplay);
+    }
+
+    private void initializeDevices(Room startRoom, Direction startDirection) {
         Map<Direction, Bitmap> icons = new HashMap<>();
         icons.put(Direction.EAST, BitmapFactory.decodeResource(getResources(), R.drawable.arrow_east));
         icons.put(Direction.SOUTH, BitmapFactory.decodeResource(getResources(), R.drawable.arrow_south));
@@ -104,26 +115,30 @@ public class MainAppFragment extends Fragment {
         ImageFileNameProvider imageFileNameProvider =
                 new ImageFileNameProvider(getContext().getExternalFilesDir(android.os.Environment.DIRECTORY_PICTURES).getAbsolutePath());
 
-        initializeDisplay(startRoom, imageFileNameProvider, icons);
+        initializeDisplay(startRoom, startDirection, imageFileNameProvider, icons);
 
-        initializeCamera(startRoom, imageFileNameProvider, icons);
+        initializeCamera(startRoom, startDirection, imageFileNameProvider, icons);
     }
 
-    private void initializeDisplay(Room room, ImageFileNameProvider imageFileNameProvider, Map<Direction, Bitmap> icons) {
+    private void initializeDisplay(
+            Room room,
+            Direction startDirection,
+            ImageFileNameProvider imageFileNameProvider,
+            Map<Direction, Bitmap> icons) {
         Bitmap defaultImage = BitmapFactory.decodeResource(getResources(), R.drawable.no_image_available);
 
         ImageProvider imageProvider = new FilesImageProvider(imageFileNameProvider);
 
         mDisplay = new DeviceDisplay(
                 room,
-                Direction.NORTH,
+                startDirection,
                 icons,
                 imageProvider,
                 defaultImage) {
 
             @Override
             public void process(Bitmap image) {
-                Log.e(TAG, "process bitmap");
+                Log.d(TAG, "process bitmap");
                 mImageViewDisplay.setImageBitmap(image);
             }
         };
@@ -131,15 +146,13 @@ public class MainAppFragment extends Fragment {
         mDisplay.start();
     }
 
-    private void initializeCamera(Room room, ImageFileNameProvider imageFileNameProvider, Map<Direction, Bitmap> icons) {
+    private void initializeCamera(
+            Room room,
+            Direction startDirection,
+            ImageFileNameProvider imageFileNameProvider,
+            Map<Direction, Bitmap> icons) {
         ImageSaver imageSaver = new FilesImageSaver(imageFileNameProvider);
-        mCamera = new DeviceCamera(this, room, Direction.NORTH, icons, imageSaver);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        mCamera.processActivityForResult(requestCode, resultCode);
+        mCamera = new DeviceCamera(this, room, startDirection, icons, imageSaver);
     }
 
     private void initializeButtonsListeners() {
