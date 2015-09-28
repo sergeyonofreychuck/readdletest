@@ -4,15 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
+import android.util.Log;
 
 import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.ImageSaver;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -23,22 +22,22 @@ import java.util.Random;
 public class DeviceCamera extends DeviceAbstract {
 
     private ImageSaver mImageSaver;
-    private Activity mActivity;
+    private Fragment mFragment;
     private Map<Integer, File> mImageFiles;
 
-    public DeviceCamera(Activity activity, Room currentRoom, Direction direction, Map<Direction,Bitmap> icons, ImageSaver imageSaver) {
+    public DeviceCamera(Fragment fragment, Room currentRoom, Direction direction, Map<Direction,Bitmap> icons, ImageSaver imageSaver) {
         super(currentRoom, direction, icons);
 
         if (imageSaver == null) {
             throw new IllegalArgumentException("imageSaver");
         }
 
-        if (activity == null) {
-            throw new IllegalArgumentException("context");
+        if (fragment == null) {
+            throw new IllegalArgumentException("fragment");
         }
 
         mImageSaver = imageSaver;
-        mActivity = activity;
+        mFragment = fragment;
         mImageFiles = new HashMap<>();
     }
 
@@ -47,14 +46,20 @@ public class DeviceCamera extends DeviceAbstract {
     }
 
     public void processActivityForResult(int requestCode, int resultCode) {
+        Log.d(TAG, "process activity for result. request code: " + requestCode + " result code: " + resultCode);
+
         if (mImageFiles.containsKey(requestCode)) {
             if (resultCode == Activity.RESULT_OK) {
                 processImage(requestCode);
             }
+        } else {
+            Log.d(TAG, "image files not contains: " + requestCode);
         }
     }
 
     private void processImage(final int fileId){
+        Log.d(TAG, "process image: " + fileId);
+
         final File imageTempFile = mImageFiles.get(fileId);
         mImageSaver.saveImage(imageTempFile, mRoom.getCoordinates(), mDirection, new ImageSaver.SaveImageCallback() {
             @Override
@@ -72,7 +77,7 @@ public class DeviceCamera extends DeviceAbstract {
 
     private File createImageFile(int fileId) throws IOException {
         String imageFileName = "TMP_JPEG_" + fileId + "_";
-        File storageDir = mActivity.getExternalFilesDir(android.os.Environment.DIRECTORY_PICTURES);
+        File storageDir = mFragment.getContext().getExternalFilesDir(android.os.Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,
                 ".jpg",
@@ -85,10 +90,10 @@ public class DeviceCamera extends DeviceAbstract {
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(mActivity.getPackageManager()) != null) {
+        if (takePictureIntent.resolveActivity(mFragment.getContext().getPackageManager()) != null) {
             // Create the File where the photo should go
             File photoFile = null;
-            int fileId = new Random().nextInt();
+            int fileId = new Random().nextInt(65535);
             try {
                 photoFile = createImageFile(fileId);
                 mImageFiles.put(fileId, photoFile);
@@ -99,7 +104,7 @@ public class DeviceCamera extends DeviceAbstract {
             if (photoFile != null) {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
                         Uri.fromFile(photoFile));
-                mActivity.startActivityForResult(takePictureIntent, fileId);
+                mFragment.startActivityForResult(takePictureIntent, fileId);
             } else {
                 //TODO handle it
             }

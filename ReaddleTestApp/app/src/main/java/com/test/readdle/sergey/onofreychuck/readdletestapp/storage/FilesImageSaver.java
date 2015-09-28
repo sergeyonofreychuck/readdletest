@@ -33,6 +33,8 @@ public class FilesImageSaver implements ImageSaver {
 
     @Override
     public void saveImage(File imageTempFile, RoomCoordinates coordinates, Direction direction, SaveImageCallback callback) {
+        Log.d(TAG, "save image. " + imageTempFile + "   " + coordinates + "  " + direction);
+
         File imageFile = mFileNameProvider.getImageFile(coordinates, direction);
 
         new SaveTask(imageFile, imageTempFile, callback).execute();
@@ -45,6 +47,7 @@ public class FilesImageSaver implements ImageSaver {
         private SaveImageCallback mCallback;
 
         public SaveTask(File imageFile, File imageTempFile, SaveImageCallback callback) {
+
             if (imageFile == null) {
                 throw new IllegalArgumentException("imageFile");
             }
@@ -65,7 +68,11 @@ public class FilesImageSaver implements ImageSaver {
 
         @Override
         protected Void doInBackground(Void... params) {
+            Log.d(TAG, "copy image: " + mImageTempFile.getAbsolutePath() + "  in  " + mImageFile.getAbsolutePath());
+
             if (mImageFile.exists() && !mImageFile.delete()) {
+                cancel(false);
+                return null;
                 //FIXME throw exception or something like this
             }
 
@@ -81,11 +88,13 @@ public class FilesImageSaver implements ImageSaver {
 
         @Override
         protected void onCancelled() {
+            Log.d(TAG, "cancelled");
             mCallback.notSaved();
         }
 
         @Override
         protected void onPostExecute(Void result) {
+            Log.d(TAG, "success");
             mCallback.success();
         }
 

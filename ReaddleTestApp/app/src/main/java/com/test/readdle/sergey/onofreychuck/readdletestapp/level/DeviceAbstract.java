@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public abstract class DeviceAbstract implements Trackable {
 
-    private final String TAG = getClass().getSimpleName();
+    protected final String TAG = getClass().getSimpleName();
 
     protected Room mRoom;
     protected Direction mDirection;

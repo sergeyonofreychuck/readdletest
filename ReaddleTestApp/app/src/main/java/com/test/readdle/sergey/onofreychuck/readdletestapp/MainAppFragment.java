@@ -112,8 +112,8 @@ public class MainAppFragment extends Fragment {
 
             @Override
             public void process(Bitmap image) {
+                Log.e(TAG, "process bitmap");
                 mImageViewDisplay.setImageBitmap(image);
-                Log.e("zzzzzzzzzzzzzzzz", "process bitmap");
             }
         };
 
@@ -122,7 +122,7 @@ public class MainAppFragment extends Fragment {
 
     private void initializeCamera(Room room, ImageFileNameProvider imageFileNameProvider, Map<Direction, Bitmap> icons) {
         ImageSaver imageSaver = new FilesImageSaver(imageFileNameProvider);
-        mCamera = new DeviceCamera(getActivity(), room, Direction.NORTH, icons, imageSaver);
+        mCamera = new DeviceCamera(this, room, Direction.NORTH, icons, imageSaver);
     }
 
     @Override
