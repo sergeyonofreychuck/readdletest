@@ -1,38 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    style="@style/ThemeOverlay.AppCompat.Dark">
+    android:paddingLeft="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_vertical_margin"
+    android:background="@color/background">
 
     <ImageView
         android:id="@+id/img_display"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerInside"
-        android:layout_above="@id/mini_map"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_above="@+id/mini_map_container"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:src="@drawable/no_image_available"
         />
 
-    <com.test.readdle.sergey.onofreychuck.readdletestapp.widgets.MiniMap
-        android:id="@+id/mini_map"
+    <FrameLayout
+        android:id="@+id/mini_map_container"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:background="#FFF"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginBottom="16dp"
-        />
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:padding="2dp"
+        android:background="@drawable/minimap_background">
+        <com.test.readdle.sergey.onofreychuck.readdletestapp.widgets.MiniMap
+            android:id="@+id/mini_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_toLeftOf="@id/mini_map"
-        android:layout_alignTop="@id/mini_map"
+        android:layout_toLeftOf="@id/mini_map_container"
+        android:layout_alignTop="@id/mini_map_container"
         android:layout_alignParentBottom="true"
         >
 
@@ -41,9 +47,9 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="@dimen/margin_in_block"
             android:text="load image"
-            android:background="@color/main"
+            android:background="@color/color_primary"
             />
 
         <Button
@@ -51,14 +57,14 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="@dimen/margin_in_block"
             android:text="step forward"
-            android:background="@color/main"
+            android:background="@color/color_primary"
             />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="16dp"
+            android:layout_height="@dimen/activity_horizontal_margin"
             android:layout_weight="1"
             android:orientation="horizontal"
             >
@@ -69,9 +75,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="left"
-                android:background="@color/main"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="16dp"
+                android:background="@color/color_primary"
+                android:layout_marginRight="@dimen/margin_in_block"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
                 />
             <Button
                 android:id="@+id/btn_turn_right"
@@ -79,10 +85,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="right"
-                android:background="@color/main"
-                android:layout_marginBottom="16dp"
+                android:background="@color/color_primary"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
                 />
         </LinearLayout>
     </LinearLayout>
-
 </RelativeLayout>

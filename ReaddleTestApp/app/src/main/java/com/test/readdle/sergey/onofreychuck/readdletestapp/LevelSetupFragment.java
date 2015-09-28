@@ -2,7 +2,10 @@ package com.test.readdle.sergey.onofreychuck.readdletestapp;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -30,6 +33,8 @@ public class LevelSetupFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setHasOptionsMenu(true);
+
         mLevelStructureStorage = new LevelStructureFileStorage(getContext());
 
         mLevelStructureStorage.load(Globals.LEVEL_SAVE_KEY, new LevelStructureStorage.LoadCallback() {
@@ -53,6 +58,12 @@ public class LevelSetupFragment extends Fragment {
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.level_setup, container, false);
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        menu.clear();
+    }
+
 
     @Override
     public void onStart() {

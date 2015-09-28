@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="main">#CDDC39</color>
+    <color name="color_primary">#CDDC39</color>
+    <color name="color_primary_dark">#9E9D24</color>
+    <color name="background">#FFFFFF</color>
 </resources>
