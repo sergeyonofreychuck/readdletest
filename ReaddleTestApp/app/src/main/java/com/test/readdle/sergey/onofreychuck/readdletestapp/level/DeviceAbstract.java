@@ -13,12 +13,12 @@ public abstract class DeviceAbstract implements Trackable {
 
     protected final String TAG = getClass().getSimpleName();
 
-    protected Room mRoom;
-    protected Direction mDirection;
+    private Room mRoom;
+    private Direction mDirection;
     private PositionChangedCallback mPositionCallback;
     private Map<Direction,Bitmap> mIcons;
 
-    public DeviceAbstract(Room currentRoom, Direction direction, Map<Direction,Bitmap> icons) {
+    protected DeviceAbstract(Room currentRoom, Direction direction, Map<Direction,Bitmap> icons) {
         if (currentRoom == null){
             throw new IllegalArgumentException("location");
         }

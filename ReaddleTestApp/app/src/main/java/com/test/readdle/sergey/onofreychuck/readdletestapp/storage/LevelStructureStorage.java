@@ -21,7 +21,9 @@ public interface LevelStructureStorage {
         }
     } ;
 
+    @SuppressWarnings("id parameter can be used in future to store more than one level")
     void save(String id, List<RoomCoordinates> coordinates, SaveCallback storageCallback);
+    @SuppressWarnings("id parameter can be used in future to store more than one level")
     void load(String id,LoadCallback callback);
 
     interface SaveCallback {

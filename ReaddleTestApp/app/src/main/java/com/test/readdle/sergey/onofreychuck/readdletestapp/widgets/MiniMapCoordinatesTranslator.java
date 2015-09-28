@@ -1,15 +1,13 @@
 package com.test.readdle.sergey.onofreychuck.readdletestapp.widgets;
 
 import android.graphics.Rect;
-import android.util.Log;
-import android.view.MotionEvent;
 
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.RoomCoordinates;
 
 /**
  * Created by sergey on 9/26/15.
  */
-public class MiniMapCoordinatesTranslator {
+class MiniMapCoordinatesTranslator {
 
     private Rect mClipBounds;
     private int mColumns;
@@ -19,10 +17,11 @@ public class MiniMapCoordinatesTranslator {
         if (clipBounds == null) {
             throw new IllegalArgumentException("clipBounds");
         }
-
-        if (rows == 0 || columns == 0) {
-            mColumns = columns;
-            mRows = rows;
+        if (rows <= 0) {
+            throw new IllegalArgumentException("rows");
+        }
+        if (columns <= 0) {
+            throw new IllegalArgumentException("columns");
         }
 
         mClipBounds = clipBounds;
@@ -30,7 +29,7 @@ public class MiniMapCoordinatesTranslator {
         mRows = rows;
     }
 
-    public Rect getBouds(int x, int y) {
+    public Rect getBounds(int x, int y) {
 
         int allWidth = mClipBounds.right - mClipBounds.left;
         int allHeight = mClipBounds.bottom - mClipBounds.top;

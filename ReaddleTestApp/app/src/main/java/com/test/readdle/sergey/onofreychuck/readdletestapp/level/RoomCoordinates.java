@@ -8,9 +8,9 @@ import com.google.gson.annotations.SerializedName;
 public class RoomCoordinates {
 
     @SerializedName("x")
-    private int mX;
+    private final int mX;
     @SerializedName("y")
-    private int mY;
+    private final int mY;
 
     public RoomCoordinates(int x, int y) {
         mX = x;
@@ -27,7 +27,7 @@ public class RoomCoordinates {
 
     @Override
     public int hashCode() {
-        return new Integer(mX).hashCode() ^ new Integer(mY);
+        return Integer.valueOf(mX).hashCode() ^ Integer.valueOf(mY).hashCode();
     }
 
     @Override
@@ -41,11 +41,6 @@ public class RoomCoordinates {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        return sb.append("Room coordinates. X:")
-                .append(mX)
-                .append(" Y:")
-                .append(mY)
-                .toString();
+        return "Room coordinates. X:" + mX + " Y:" + mY;
     }
 }

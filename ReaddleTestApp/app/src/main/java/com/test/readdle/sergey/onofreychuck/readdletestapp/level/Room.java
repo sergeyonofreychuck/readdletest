@@ -37,10 +37,6 @@ public class Room {
         return ret;
     }
 
-    public Wall getWall(Direction direction) {
-        return mWalls.get(direction);
-    }
-
     public RoomCoordinates getCoordinates(){
         return mRoomCoordinates;
     }

@@ -7,6 +7,6 @@ import java.util.List;
 /**
  * Created by sergey on 9/28/15.
  */
-public interface ConfigurationChangedListener {
+interface ConfigurationChangedListener {
     void onConfigurationChanged(List<RoomCoordinates> rooms);
 }

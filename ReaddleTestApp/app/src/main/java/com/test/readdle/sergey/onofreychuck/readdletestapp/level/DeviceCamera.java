@@ -61,7 +61,7 @@ public class DeviceCamera extends DeviceAbstract {
         Log.d(TAG, "process image: " + fileId);
 
         final File imageTempFile = mImageFiles.get(fileId);
-        mImageSaver.saveImage(imageTempFile, mRoom.getCoordinates(), mDirection, new ImageSaver.SaveImageCallback() {
+        mImageSaver.saveImage(imageTempFile, getRoom().getCoordinates(), getDirection(), new ImageSaver.SaveImageCallback() {
             @Override
             public void success() {
                 mImageFiles.get(fileId).delete();
@@ -70,7 +70,8 @@ public class DeviceCamera extends DeviceAbstract {
 
             @Override
             public void notSaved() {
-                //TODO do something
+                throw new RuntimeException("error saving image");
+                //TODO handle error
             }
         });
     }
@@ -78,13 +79,11 @@ public class DeviceCamera extends DeviceAbstract {
     private File createImageFile(int fileId) throws IOException {
         String imageFileName = "TMP_JPEG_" + fileId + "_";
         File storageDir = mFragment.getContext().getExternalFilesDir(android.os.Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
+        return File.createTempFile(
                 imageFileName,
                 ".jpg",
                 storageDir
         );
-
-        return image;
     }
 
     private void dispatchTakePictureIntent() {
@@ -92,22 +91,19 @@ public class DeviceCamera extends DeviceAbstract {
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(mFragment.getContext().getPackageManager()) != null) {
             // Create the File where the photo should go
-            File photoFile = null;
+            File photoFile;
             int fileId = new Random().nextInt(65535);
             try {
                 photoFile = createImageFile(fileId);
                 mImageFiles.put(fileId, photoFile);
             } catch (IOException ex) {
+                throw new RuntimeException("error create photo file");
                 //TODO handle it
             }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                        Uri.fromFile(photoFile));
-                mFragment.startActivityForResult(takePictureIntent, fileId);
-            } else {
-                //TODO handle it
-            }
+
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                    Uri.fromFile(photoFile));
+            mFragment.startActivityForResult(takePictureIntent, fileId);
         }
     }
 }

@@ -5,7 +5,7 @@ import com.test.readdle.sergey.onofreychuck.readdletestapp.level.Direction;
 /**
  * Created by sergey on 9/27/15.
  */
-public class Globals {
+class Globals {
 
     public static final int LEVEL_X_DIMENSION = 8;
     public static final int LEVEL_Y_DIMENSION = 8;

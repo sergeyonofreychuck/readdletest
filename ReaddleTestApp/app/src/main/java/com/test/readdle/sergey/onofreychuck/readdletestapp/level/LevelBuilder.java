@@ -1,7 +1,5 @@
 package com.test.readdle.sergey.onofreychuck.readdletestapp.level;
 
-import android.graphics.Bitmap;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +7,7 @@ import java.util.Map;
 /**
  * Created by sergey on 9/26/15.
  */
-public class LevelBuilder {
+class LevelBuilder {
 
     private Level mLevel;
     private List<RoomCoordinates> mLevelStructure;

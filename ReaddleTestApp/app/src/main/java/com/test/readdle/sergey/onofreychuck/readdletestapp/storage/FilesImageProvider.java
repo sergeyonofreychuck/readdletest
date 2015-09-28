@@ -21,7 +21,7 @@ public class FilesImageProvider implements ImageProvider {
 
     public FilesImageProvider(ImageFileNameProvider fileNameProvider) {
         if (fileNameProvider == null) {
-            mFileNameProvider = fileNameProvider;
+            throw new IllegalArgumentException("fileNameProvider");
         }
 
         mFileNameProvider = fileNameProvider;

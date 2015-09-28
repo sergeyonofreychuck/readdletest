@@ -9,10 +9,10 @@ public enum Direction {
     NORTH (0, -1),
     EAST (1, 0);
 
-    private static int mLength = values().length;
+    private static final int mLength = values().length;
 
-    private int mXDirectionModificator;
-    private int mYDirectionModificator;
+    private final int mXDirectionModificator;
+    private final int mYDirectionModificator;
 
     Direction(int xModificator, int yModificator) {
         mXDirectionModificator = xModificator;

@@ -1,7 +1,5 @@
 package com.test.readdle.sergey.onofreychuck.readdletestapp.storage;
 
-import android.graphics.Bitmap;
-
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.Direction;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.RoomCoordinates;
 

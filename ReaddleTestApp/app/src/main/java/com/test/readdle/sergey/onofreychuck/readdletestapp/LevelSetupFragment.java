@@ -25,7 +25,7 @@ import java.util.List;
 public class LevelSetupFragment extends Fragment {
 
     private ConfigurationChangedListener mConfigurationChangedListener;
-    private List<RoomCoordinates> mRooms;
+    private final List<RoomCoordinates> mRooms;
 
     public LevelSetupFragment() {
         mRooms = new ArrayList<>();

@@ -13,7 +13,7 @@ abstract public class DeviceDisplay extends DeviceAbstract {
 
     private ImageProvider mImageProvider;
     private Bitmap mDefaultBitmap;
-    ImageProvider.GetImageCallback mGetImageCallback;
+    private ImageProvider.GetImageCallback mGetImageCallback;
 
     public DeviceDisplay(Room currentRoom, Direction direction, Map<Direction,Bitmap> icons, ImageProvider imageProvider, Bitmap defaultBitmap) {
         super(currentRoom, direction, icons);
@@ -44,7 +44,7 @@ abstract public class DeviceDisplay extends DeviceAbstract {
     @Override
     public void positionChanged(){
         super.positionChanged();
-        mImageProvider.tryGetImage(mRoom.getCoordinates(), mDirection, mGetImageCallback);
+        mImageProvider.tryGetImage(getRoom().getCoordinates(), getDirection(), mGetImageCallback);
     }
 
     public void start() {

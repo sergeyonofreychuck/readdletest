@@ -3,9 +3,7 @@ package com.test.readdle.sergey.onofreychuck.readdletestapp.widgets;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -34,9 +32,11 @@ public class MiniMap extends View {
     private int mColumns;
     private List<RoomCoordinates> mRooms;
     private Trackable mTrackedObject;
-    private Paint mPaint = new Paint();
     private Drawable mRoomDrawable;
     private MiniMapOnTouchListener mOnTouchListener;
+    private Rect mClipBounds;
+    private float mTrackableScaleX = 0;
+    private float mTrackableScaleY = 0;
 
     private MiniMapCoordinatesTranslator mTranslator;
 
@@ -56,12 +56,6 @@ public class MiniMap extends View {
     }
 
     private void init(Context context){
-        mPaint.setAntiAlias(true);
-        mPaint.setStrokeWidth(6f);
-        mPaint.setColor(Color.RED);
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeJoin(Paint.Join.ROUND);
-
         mRoomDrawable = context.getResources().getDrawable(R.drawable.minimap_room);
 
         setOnTouchListener(new OnTouchListener() {
@@ -78,6 +72,7 @@ public class MiniMap extends View {
         });
     }
 
+    @SuppressWarnings("rows and columns can take different values in future releases")
     public void initGrid(int rows, int columns) {
         mRows = rows;
         mColumns = columns;
@@ -89,7 +84,6 @@ public class MiniMap extends View {
         }
 
         mRooms = new ArrayList<>(rooms);
-
         invalidate();
     }
 
@@ -112,31 +106,33 @@ public class MiniMap extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-
-        Rect bounds = canvas.getClipBounds();
-        if (mTranslator == null) {
-            mTranslator = new MiniMapCoordinatesTranslator(bounds, mRows, mColumns);
+        if (mClipBounds == null) {
+            mClipBounds = canvas.getClipBounds();
+            mTranslator = new MiniMapCoordinatesTranslator(mClipBounds, mRows, mColumns);
         }
 
-        if (mRooms != null) {
-            for (RoomCoordinates coordinates : mRooms){
-                Rect currentCellBounds = mTranslator.getBouds(coordinates.getX(), coordinates.getY());
+        if (mRooms == null) {
+            return; //data can be still not set
+        }
 
-                if (mTrackedObject != null && coordinates.equals(mTrackedObject.getRoom().getCoordinates())) {
-                    Bitmap icon = mTrackedObject.getIcon();
+        for (RoomCoordinates coordinates : mRooms){
+            Rect currentCellBounds = mTranslator.getBounds(coordinates.getX(), coordinates.getY());
 
-                    float scaleX = (float)currentCellBounds.width()/(float)icon.getWidth();
-                    float scaleY = (float)currentCellBounds.height()/(float)icon.getHeight();
+            if (mTrackedObject != null && coordinates.equals(mTrackedObject.getRoom().getCoordinates())) {
+                Bitmap icon = mTrackedObject.getIcon();
 
-                    Matrix transformMatrix = new Matrix();
-                    transformMatrix.postScale(scaleX, scaleY);
-                    transformMatrix.postTranslate(currentCellBounds.left, currentCellBounds.top);
-
-                    canvas.drawBitmap(icon, transformMatrix, null);
-                } else {
-                    mRoomDrawable.setBounds(mTranslator.getBouds(coordinates.getX(), coordinates.getY()));
-                    mRoomDrawable.draw(canvas);
+                if (mTrackableScaleX == 0f || mTrackableScaleY == 0f) {
+                    mTrackableScaleX = (float)currentCellBounds.width()/(float)icon.getWidth();
+                    mTrackableScaleY = (float)currentCellBounds.height()/(float)icon.getHeight();
                 }
+                Matrix transformMatrix = new Matrix();
+                transformMatrix.postScale(mTrackableScaleX, mTrackableScaleY);
+                transformMatrix.postTranslate(currentCellBounds.left, currentCellBounds.top);
+
+                canvas.drawBitmap(icon, transformMatrix, null);
+            } else {
+                mRoomDrawable.setBounds(mTranslator.getBounds(coordinates.getX(), coordinates.getY()));
+                mRoomDrawable.draw(canvas);
             }
         }
     }

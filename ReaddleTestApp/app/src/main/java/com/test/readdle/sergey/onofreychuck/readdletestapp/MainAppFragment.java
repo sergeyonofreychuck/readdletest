@@ -42,6 +42,7 @@ public class MainAppFragment extends Fragment {
     private DeviceDisplay mDisplay;
     private DeviceCamera mCamera;
     private ImageView mImageViewDisplay;
+    private MiniMap mMiniMap;
 
     public MainAppFragment() {
     }
@@ -56,10 +57,10 @@ public class MainAppFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.main_app, container, false);
+        final View rootView = inflater.inflate(R.layout.main_app, container, false);
 
-        final MiniMap miniMap = (MiniMap) rootView.findViewById(R.id.mini_map);
-        miniMap.initGrid(Globals.LEVEL_X_DIMENSION, Globals.LEVEL_Y_DIMENSION);
+        mMiniMap = (MiniMap) rootView.findViewById(R.id.mini_map);
+        mMiniMap.initGrid(Globals.LEVEL_X_DIMENSION, Globals.LEVEL_Y_DIMENSION);
 
         mImageViewDisplay = (ImageView)rootView.findViewById(R.id.img_display);
 
@@ -67,7 +68,7 @@ public class MainAppFragment extends Fragment {
             @Override
             public void success(List<RoomCoordinates> coordinates) {
                 initializeLevel(coordinates, coordinates.get(coordinates.size() - 1), Globals.DEFAULT_DEVICE_DIRECTION);
-                initializeButtonsListeners();
+                initializeButtonsListeners(rootView);
             }
 
             @Override
@@ -96,13 +97,12 @@ public class MainAppFragment extends Fragment {
         initializeLevel(rooms, mDisplay.getRoom().getCoordinates(), mDisplay.getDirection());
     }
 
-    public void initializeLevel(List<RoomCoordinates> coordinates, RoomCoordinates startCoordinates, Direction startDirection){
-        final MiniMap miniMap = (MiniMap) getView().findViewById(R.id.mini_map);
-        Level level = Level.BuildLevel(coordinates, Globals.LEVEL_X_DIMENSION, Globals.LEVEL_Y_DIMENSION);
-        miniMap.setRooms(new ArrayList<>(coordinates));
+    private void initializeLevel(List<RoomCoordinates> coordinates, RoomCoordinates startCoordinates, Direction startDirection){
+        Level level = Level.BuildLevel(coordinates);
+        mMiniMap.setRooms(new ArrayList<>(coordinates));
         Room startRoom = level.getRoom(startCoordinates);
         initializeDevices(startRoom, startDirection);
-        miniMap.setTrackedObject(mDisplay);
+        mMiniMap.setTrackedObject(mDisplay);
     }
 
     private void initializeDevices(Room startRoom, Direction startDirection) {
@@ -155,8 +155,8 @@ public class MainAppFragment extends Fragment {
         mCamera = new DeviceCamera(this, room, startDirection, icons, imageSaver);
     }
 
-    private void initializeButtonsListeners() {
-        getView().findViewById(R.id.btn_forward).setOnClickListener(new View.OnClickListener() {
+    private void initializeButtonsListeners(View rootView) {
+        rootView.findViewById(R.id.btn_forward).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mDisplay.canDoStepForward()){
@@ -165,21 +165,21 @@ public class MainAppFragment extends Fragment {
             }
         });
 
-        getView().findViewById(R.id.btn_turn_left).setOnClickListener(new View.OnClickListener() {
+        rootView.findViewById(R.id.btn_turn_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDisplay.turnLeft();
             }
         });
 
-        getView().findViewById(R.id.btn_turn_right).setOnClickListener(new View.OnClickListener() {
+        rootView.findViewById(R.id.btn_turn_right).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDisplay.turnRight();
             }
         });
 
-        getView().findViewById(R.id.btn_loadImage).setOnClickListener(new View.OnClickListener() {
+        rootView.findViewById(R.id.btn_loadImage).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCamera.moveTo(mDisplay);

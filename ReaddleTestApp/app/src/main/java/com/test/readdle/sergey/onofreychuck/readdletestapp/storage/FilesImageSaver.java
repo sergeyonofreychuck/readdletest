@@ -1,6 +1,5 @@
 package com.test.readdle.sergey.onofreychuck.readdletestapp.storage;
 
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -25,7 +24,7 @@ public class FilesImageSaver implements ImageSaver {
 
     public FilesImageSaver(ImageFileNameProvider fileNameProvider) {
         if (fileNameProvider == null) {
-            mFileNameProvider = fileNameProvider;
+            throw new IllegalArgumentException("fileNameProvider");
         }
 
         mFileNameProvider = fileNameProvider;

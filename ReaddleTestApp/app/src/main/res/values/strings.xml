@@ -1,7 +1,11 @@
 <resources>
     <string name="app_name">ReaddleTestApp</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Location Setup</string>
 
     <string name="main_fragment_tag">main_app</string>
+
+    <string name="btn_caption_load_image">load image</string>
+    <string name="btn_caption_step_forward">step forward</string>
+    <string name="btn_caption_turn_left">left</string>
+    <string name="btn_caption_turn_right">right</string>
 </resources>

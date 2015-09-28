@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.RoomCoordinates;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,7 +20,6 @@ public class LevelStructureFileStorage implements LevelStructureStorage {
 
     private static final String ID_PREFIX = "LevelStructure";
 
-    private Context mContext;
     private SharedPreferences mPreferences;
     private Handler mHandler;
 
@@ -30,8 +28,7 @@ public class LevelStructureFileStorage implements LevelStructureStorage {
             throw new IllegalArgumentException("context");
         }
 
-        mContext = context;
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         mHandler = new Handler(Looper.getMainLooper());
     }
 
