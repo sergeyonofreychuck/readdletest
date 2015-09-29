@@ -49,7 +49,6 @@ public class LevelSetupFragment extends Fragment {
 
             @Override
             public void failed() {
-                throw new RuntimeException("failed saving level structure");
                 //TODO handle errors
             }
         });

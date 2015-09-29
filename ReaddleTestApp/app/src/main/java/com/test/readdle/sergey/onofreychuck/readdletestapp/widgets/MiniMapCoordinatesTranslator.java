@@ -14,15 +14,8 @@ class MiniMapCoordinatesTranslator {
         if (clipBounds == null) {
             throw new IllegalArgumentException("clipBounds");
         }
-        if (rows <= 0) {
-            throw new IllegalArgumentException("rows");
-        }
-        if (columns <= 0) {
-            throw new IllegalArgumentException("columns");
-        }
 
         mClipBounds = clipBounds;
-
         int allWidth = mClipBounds.right - mClipBounds.left;
         int allHeight = mClipBounds.bottom - mClipBounds.top;
         mCellWidth = (float)allWidth/(float)columns;

@@ -8,4 +8,8 @@
     <string name="btn_caption_step_forward">step forward</string>
     <string name="btn_caption_turn_left">left</string>
     <string name="btn_caption_turn_right">right</string>
+
+    <string name="level_setup_help">Please, build a location structure by typing the minimap in appropriate place.
+        Note that every square on the minimap will cause four photos in the interactive screen. Press "back" when location design will be ready.
+        You can edit it again by using appropriate menu item in the interactive screen</string>
 </resources>

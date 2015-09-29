@@ -86,6 +86,15 @@ public class MiniMap extends View {
     }
 
     public void setTrackedObject(Trackable trackedObject){
+        if (mTrackedObject != null) {
+            mTrackedObject.setActionsCallback(null);
+        }
+
+        if (trackedObject == null) {
+            mTrackedObject = null;
+            return;
+        }
+
         mTrackedObject = trackedObject;
         mTrackedObject.setActionsCallback(new DeviceAbstract.PositionChangedCallback() {
             @Override

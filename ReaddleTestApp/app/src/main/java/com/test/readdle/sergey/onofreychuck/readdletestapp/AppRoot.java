@@ -7,6 +7,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.RoomCoordinates;
+import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.LevelStructureFileStorage;
+import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.LevelStructureStorage;
 
 import java.util.List;
 
@@ -17,8 +19,23 @@ public class AppRoot extends AppCompatActivity implements ConfigurationChangedLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_root);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        new LevelStructureFileStorage(this).load(Globals.LEVEL_SAVE_KEY, new LevelStructureStorage.LoadCallback() {
+            @Override
+            public void success(List<RoomCoordinates> coordinates) {
+                if (coordinates.size() == 0) {
+                    switchToLevelSetupFragment();
+                }
+            }
+
+            @Override
+            public void failed() {
+                switchToLevelSetupFragment();
+            }
+        });
+
     }
 
     @Override
@@ -26,17 +43,20 @@ public class AppRoot extends AppCompatActivity implements ConfigurationChangedLi
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            LevelSetupFragment levelSetupFragment = new LevelSetupFragment();
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.add(R.id.root_container, levelSetupFragment);
-            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            ft.addToBackStack(null);
-            ft.commit();
-
+            switchToLevelSetupFragment();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void switchToLevelSetupFragment() {
+        LevelSetupFragment levelSetupFragment = new LevelSetupFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(R.id.root_container, levelSetupFragment);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        ft.addToBackStack(null);
+        ft.commit();
     }
 
     @Override

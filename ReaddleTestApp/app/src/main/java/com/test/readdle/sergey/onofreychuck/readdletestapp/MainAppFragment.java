@@ -64,14 +64,14 @@ public class MainAppFragment extends Fragment {
         new LevelStructureFileStorage(getContext()).load(Globals.LEVEL_SAVE_KEY, new LevelStructureStorage.LoadCallback() {
             @Override
             public void success(List<RoomCoordinates> coordinates) {
-                initializeLevel(coordinates, coordinates.get(coordinates.size() - 1), Globals.DEFAULT_DEVICE_DIRECTION);
+                onConfigurationChanged(coordinates);
                 initializeButtonsListeners(rootView);
             }
 
             @Override
             public void failed() {
-                throw new RuntimeException("failed loading level structure");
-                //TODO handle errors
+                onConfigurationChanged(new ArrayList<RoomCoordinates>());
+                initializeButtonsListeners(rootView);
             }
         });
         return rootView;
@@ -92,7 +92,19 @@ public class MainAppFragment extends Fragment {
     }
 
     public void onConfigurationChanged(List<RoomCoordinates> rooms) {
-        initializeLevel(rooms, mDisplay.getRoom().getCoordinates(), mDisplay.getDirection());
+        if (rooms.size() == 0) {
+            initializeEmptyLevel();
+            return;
+        }
+
+        RoomCoordinates startCoordinates = mDisplay != null
+                ? mDisplay.getRoom().getCoordinates()
+                : rooms.get(rooms.size() - 1);
+
+        Direction direction = mDisplay != null
+                ? mDisplay.getDirection() : Globals.DEFAULT_DEVICE_DIRECTION;
+
+        initializeLevel(rooms, startCoordinates, direction);
     }
 
     private void initializeLevel(List<RoomCoordinates> coordinates, RoomCoordinates startCoordinates, Direction startDirection){
@@ -101,6 +113,16 @@ public class MainAppFragment extends Fragment {
         Room startRoom = level.getRoom(startCoordinates);
         initializeDevices(startRoom, startDirection);
         mMiniMap.setTrackedObject(mDisplay);
+        setButtonsEnabled(true);
+    }
+
+    private void initializeEmptyLevel() {
+        mMiniMap.setTrackedObject(null);
+        mMiniMap.setRooms(new ArrayList<RoomCoordinates>());
+        mDisplay = null;
+        mCamera = null;
+        setButtonsEnabled(false);
+        mImageViewDisplay.setImageResource(R.drawable.no_image_available);
     }
 
     private void initializeDevices(Room startRoom, Direction startDirection) {
@@ -151,7 +173,25 @@ public class MainAppFragment extends Fragment {
             ImageFileNameProvider imageFileNameProvider,
             Map<Direction, Bitmap> icons) {
         ImageSaver imageSaver = new FilesImageSaver(imageFileNameProvider);
-        mCamera = new DeviceCamera(this, room, startDirection, icons, imageSaver);
+        mCamera = new DeviceCamera(
+                this,
+                room,
+                startDirection,
+                icons,
+                imageSaver,
+                new DeviceCamera.ImageSavedCallback() {
+            @Override
+            public void imageSaved() {
+                mDisplay.positionChanged();
+            }
+        });
+    }
+
+    private void setButtonsEnabled(boolean enabled){
+        getView().findViewById(R.id.btn_forward).setEnabled(enabled);
+        getView().findViewById(R.id.btn_turn_left).setEnabled(enabled);
+        getView().findViewById(R.id.btn_turn_right).setEnabled(enabled);
+        getView().findViewById(R.id.btn_loadImage).setEnabled(enabled);
     }
 
     private void initializeButtonsListeners(View rootView) {

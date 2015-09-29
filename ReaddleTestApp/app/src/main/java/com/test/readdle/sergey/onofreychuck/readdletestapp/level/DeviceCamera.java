@@ -21,8 +21,15 @@ public class DeviceCamera extends DeviceAbstract {
     private ImageSaver mImageSaver;
     private Fragment mFragment;
     private Map<Integer, File> mImageFiles;
+    private ImageSavedCallback mCallback;
 
-    public DeviceCamera(Fragment fragment, Room currentRoom, Direction direction, Map<Direction,Bitmap> icons, ImageSaver imageSaver) {
+    public DeviceCamera(
+            Fragment fragment,
+            Room currentRoom,
+            Direction direction,
+            Map<Direction,Bitmap>
+            icons, ImageSaver imageSaver,
+            ImageSavedCallback callback) {
         super(currentRoom, direction, icons);
 
         if (imageSaver == null) {
@@ -36,6 +43,7 @@ public class DeviceCamera extends DeviceAbstract {
         mImageSaver = imageSaver;
         mFragment = fragment;
         mImageFiles = new HashMap<>();
+        mCallback = callback;
     }
 
     public void makePhoto(){
@@ -66,6 +74,7 @@ public class DeviceCamera extends DeviceAbstract {
                     //TODO add error handling
                 }
                 mImageFiles.remove(fileId);
+                mCallback.imageSaved();
             }
 
             @Override
@@ -106,5 +115,9 @@ public class DeviceCamera extends DeviceAbstract {
             mFragment.startActivityForResult(takePictureIntent, fileId);
         }
         //TODO handle when there is no camera on device
+    }
+
+    public interface ImageSavedCallback {
+        void imageSaved();
     }
 }
