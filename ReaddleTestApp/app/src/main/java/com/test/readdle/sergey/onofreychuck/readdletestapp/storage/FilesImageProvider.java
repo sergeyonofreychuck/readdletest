@@ -65,7 +65,7 @@ public class FilesImageProvider implements ImageProvider {
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
             Bitmap bitmap = BitmapFactory.decodeFile(mImageFile.getAbsolutePath(), options);
             if(bitmap == null) {
-                Log.d(TAG, "bitmap null, cancel");
+                Log.d(TAG, "bitmap null: " + mImageFile.getAbsolutePath() + " cancel");
                 cancel(false);
                 return null;
             }

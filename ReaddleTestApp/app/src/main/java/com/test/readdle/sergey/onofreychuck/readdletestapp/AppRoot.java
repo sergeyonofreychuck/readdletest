@@ -25,16 +25,6 @@ public class AppRoot extends AppCompatActivity implements ConfigurationChangedLi
         setSupportActionBar(toolbar);
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-
-        menu.clear();
-        getMenuInflater().inflate(R.menu.menu_app_root, menu);
-        return true;
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();

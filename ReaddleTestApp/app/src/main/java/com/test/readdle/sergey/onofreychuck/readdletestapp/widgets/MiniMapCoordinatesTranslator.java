@@ -10,8 +10,8 @@ import com.test.readdle.sergey.onofreychuck.readdletestapp.level.RoomCoordinates
 class MiniMapCoordinatesTranslator {
 
     private Rect mClipBounds;
-    private int mColumns;
-    private int mRows;
+    private float mCellWidth;
+    private float mCellHeight;
 
     public MiniMapCoordinatesTranslator(Rect clipBounds, int columns, int rows){
         if (clipBounds == null) {
@@ -25,32 +25,23 @@ class MiniMapCoordinatesTranslator {
         }
 
         mClipBounds = clipBounds;
-        mColumns = columns;
-        mRows = rows;
-    }
-
-    public Rect getBounds(int x, int y) {
 
         int allWidth = mClipBounds.right - mClipBounds.left;
         int allHeight = mClipBounds.bottom - mClipBounds.top;
-        float width = (float)allWidth/(float)mColumns;
-        float height = (float)allHeight/(float)mRows;
+        mCellWidth = (float)allWidth/(float)columns;
+        mCellHeight = (float)allHeight/(float)rows;
+    }
 
-        int left = (int)(mClipBounds.left + x * width);
-        int right = (int)(left + width);
-        int top = (int)(mClipBounds.top + y * height);
-        int bottom = (int)(top + height);
+    public Rect getBounds(int x, int y) {
+        int left = (int)(mClipBounds.left + x * mCellWidth);
+        int right = (int)(left + mCellWidth);
+        int top = (int)(mClipBounds.top + y * mCellHeight);
+        int bottom = (int)(top + mCellHeight);
 
         return new Rect(left, top, right, bottom);
     }
 
     public RoomCoordinates getTouchCoordinates(int x, int y){
-        int allWidth = mClipBounds.right - mClipBounds.left;
-        int allHeight = mClipBounds.bottom - mClipBounds.top;
-        float width = (float)allWidth/(float)mColumns;
-        float height = (float)allHeight/(float)mRows;
-
-        return new RoomCoordinates((int)(x/width), (int)(y/height));
+        return new RoomCoordinates((int)(x/mCellWidth), (int)(y/mCellHeight));
     }
-
 }

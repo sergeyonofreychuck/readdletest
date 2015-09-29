@@ -7,10 +7,12 @@ public class Wall {
 
     private final RoomAfterProvider mRoomAfterProvider;
 
-    public Wall(
-            RoomAfterProvider roomAfterProvider) {
-
+    public Wall(RoomAfterProvider roomAfterProvider) {
         mRoomAfterProvider = roomAfterProvider;
+    }
+
+    public Wall() {
+        this(null);
     }
 
     public boolean canGoAcross() {

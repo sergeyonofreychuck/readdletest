@@ -72,7 +72,6 @@ public class FilesImageSaver implements ImageSaver {
             if (mImageFile.exists() && !mImageFile.delete()) {
                 cancel(false);
                 return null;
-                //FIXME throw exception or something like this
             }
 
             try {

@@ -39,7 +39,7 @@ class LevelBuilder {
         Map<Direction, Wall> walls = new HashMap<>();
         for (final Direction direction : Direction.values()){
             Wall.RoomAfterProvider roomAfterProvider = getRoomAfterProvider(coordinates, direction);
-            walls.put(direction, new Wall(roomAfterProvider));
+            walls.put(direction, roomAfterProvider == null ? new Wall() : new Wall(roomAfterProvider));
         }
 
         return new Room(coordinates, walls);
@@ -47,18 +47,18 @@ class LevelBuilder {
 
     //Can return null
     private Wall.RoomAfterProvider getRoomAfterProvider(final RoomCoordinates coordinates, final Direction direction) {
-        if (canBeAcrossed(coordinates, direction)){
+        if (canBeСrossed(coordinates, direction)){
             return new Wall.RoomAfterProvider() {
                 @Override
                 public Room getRoom() {
-                    return mLevel.getRoom(direction.getNextRoomLoacation(coordinates));
+                    return mLevel.getRoom(direction.getNextRoomLocation(coordinates));
                 }
             };
         }
         return null;
     }
 
-    private boolean canBeAcrossed(RoomCoordinates coordinates, Direction direction) {
-        return mLevelStructure.contains(direction.getNextRoomLoacation(coordinates));
+    private boolean canBeСrossed(RoomCoordinates coordinates, Direction direction) {
+        return mLevelStructure.contains(direction.getNextRoomLocation(coordinates));
     }
 }

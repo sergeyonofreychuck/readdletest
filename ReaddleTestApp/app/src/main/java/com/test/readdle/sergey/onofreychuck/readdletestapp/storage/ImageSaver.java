@@ -16,5 +16,4 @@ public interface ImageSaver {
         //TODO add error codes
         void notSaved();
     }
-
 }

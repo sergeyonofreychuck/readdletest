@@ -13,6 +13,7 @@ public interface ImageProvider {
 
     interface GetImageCallback {
         void success(Bitmap image);
+        //TODO add error codes
         void notLoaded();
     }
 }

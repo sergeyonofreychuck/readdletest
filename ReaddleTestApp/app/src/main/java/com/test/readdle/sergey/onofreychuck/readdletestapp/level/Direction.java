@@ -37,7 +37,7 @@ public enum Direction {
         return values()[ordinal() - 1];
     }
 
-    public RoomCoordinates getNextRoomLoacation(RoomCoordinates coordinates) {
+    public RoomCoordinates getNextRoomLocation(RoomCoordinates coordinates) {
         return new RoomCoordinates(
                 coordinates.getX() + mXDirectionModificator,
                 coordinates.getY() + mYDirectionModificator);

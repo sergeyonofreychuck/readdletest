@@ -10,5 +10,4 @@ public interface Trackable {
     Room getRoom();
     Direction getDirection();
     Bitmap getIcon();
-
 }

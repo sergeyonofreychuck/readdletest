@@ -64,7 +64,7 @@ public class DeviceCamera extends DeviceAbstract {
         mImageSaver.saveImage(imageTempFile, getRoom().getCoordinates(), getDirection(), new ImageSaver.SaveImageCallback() {
             @Override
             public void success() {
-                mImageFiles.get(fileId).delete();
+                mImageFiles.get(fileId).delete(); //TODO handle false value
                 mImageFiles.remove(fileId);
             }
 
@@ -105,5 +105,6 @@ public class DeviceCamera extends DeviceAbstract {
                     Uri.fromFile(photoFile));
             mFragment.startActivityForResult(takePictureIntent, fileId);
         }
+        //TODO handle when there is no camera on device
     }
 }

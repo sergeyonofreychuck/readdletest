@@ -59,7 +59,7 @@ public abstract class DeviceAbstract implements Trackable {
         positionChanged();
     }
 
-    public void positionChanged(){
+    protected void positionChanged(){
         if (mPositionCallback != null) {
             mPositionCallback.positionChanged(mRoom, mDirection);
         }
