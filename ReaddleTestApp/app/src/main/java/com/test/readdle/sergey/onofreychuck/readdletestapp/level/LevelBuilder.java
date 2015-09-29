@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by sergey on 9/26/15.
- */
 class LevelBuilder {
 
     private Level mLevel;

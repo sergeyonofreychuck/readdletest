@@ -7,9 +7,6 @@ import com.test.readdle.sergey.onofreychuck.readdletestapp.level.RoomCoordinates
 
 import java.io.File;
 
-/**
- * Created by sergey on 9/26/15.
- */
 public class ImageFileNameProvider {
 
     private File mDestinationDirectory;

@@ -3,9 +3,6 @@ package com.test.readdle.sergey.onofreychuck.readdletestapp.level;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by sergey on 9/26/15.
- */
 public class Level {
 
     private Map<RoomCoordinates, Room> mRooms;

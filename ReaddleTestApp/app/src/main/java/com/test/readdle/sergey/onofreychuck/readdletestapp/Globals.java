@@ -2,9 +2,6 @@ package com.test.readdle.sergey.onofreychuck.readdletestapp;
 
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.Direction;
 
-/**
- * Created by sergey on 9/27/15.
- */
 class Globals {
 
     public static final int LEVEL_X_DIMENSION = 8;

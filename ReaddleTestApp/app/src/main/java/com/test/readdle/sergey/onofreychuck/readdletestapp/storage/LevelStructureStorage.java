@@ -4,9 +4,6 @@ import com.test.readdle.sergey.onofreychuck.readdletestapp.level.RoomCoordinates
 
 import java.util.List;
 
-/**
- * Created by sergey on 9/27/15.
- */
 public interface LevelStructureStorage {
 
     SaveCallback EMPTY_CALLBACK = new SaveCallback() {

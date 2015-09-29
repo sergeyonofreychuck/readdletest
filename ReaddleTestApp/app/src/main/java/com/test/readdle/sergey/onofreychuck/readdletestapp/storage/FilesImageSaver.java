@@ -13,9 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-/**
- * Created by sergey on 9/26/15.
- */
 public class FilesImageSaver implements ImageSaver {
 
     private static final String TAG = "FilesImageSaver";
@@ -100,6 +97,7 @@ public class FilesImageSaver implements ImageSaver {
             InputStream in = new FileInputStream(src);
             OutputStream out = new FileOutputStream(dst);
 
+            //noinspection TryFinallyCanBeTryWithResources Not supported for api level 15
             try {
                 // Transfer bytes from in to out
                 byte[] buf = new byte[1024];

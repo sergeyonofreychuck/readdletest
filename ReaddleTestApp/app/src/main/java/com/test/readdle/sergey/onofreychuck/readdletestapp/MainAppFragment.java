@@ -34,9 +34,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by sergey on 9/27/15.
- */
 public class MainAppFragment extends Fragment {
 
     private DeviceDisplay mDisplay;
@@ -82,6 +79,7 @@ public class MainAppFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        //noinspection ConstantConditions In this aaplication this code cant be invoken in detached stat
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         menu.clear();
         menuInflater.inflate(R.menu.menu_app_root, menu);
@@ -112,6 +110,7 @@ public class MainAppFragment extends Fragment {
         icons.put(Direction.WEST, BitmapFactory.decodeResource(getResources(), R.drawable.arrow_west));
         icons.put(Direction.NORTH, BitmapFactory.decodeResource(getResources(), R.drawable.arrow_noth));
 
+        @SuppressWarnings({"In this aaplication this code cant be invoked in detached state", "ConstantConditions"})
         ImageFileNameProvider imageFileNameProvider =
                 new ImageFileNameProvider(getContext().getExternalFilesDir(android.os.Environment.DIRECTORY_PICTURES).getAbsolutePath());
 

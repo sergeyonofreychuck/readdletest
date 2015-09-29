@@ -3,9 +3,6 @@ package com.test.readdle.sergey.onofreychuck.readdletestapp.level;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by sergey on 9/26/15.
- */
 public class Room {
 
     private Map<Direction, Wall> mWalls;

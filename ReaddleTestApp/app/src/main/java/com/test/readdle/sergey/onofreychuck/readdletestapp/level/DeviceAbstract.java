@@ -6,9 +6,6 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by sergey on 9/26/15.
- */
 public abstract class DeviceAbstract implements Trackable {
 
     protected final String TAG = getClass().getSimpleName();

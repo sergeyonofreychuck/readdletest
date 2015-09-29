@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -21,9 +22,6 @@ import com.test.readdle.sergey.onofreychuck.readdletestapp.level.Trackable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by sergey on 9/26/15.
- */
 public class MiniMap extends View {
 
     private static final String TAG = "MiniMap";
@@ -56,7 +54,7 @@ public class MiniMap extends View {
     }
 
     private void init(Context context){
-        mRoomDrawable = context.getResources().getDrawable(R.drawable.minimap_room);
+        mRoomDrawable = ContextCompat.getDrawable(context, R.drawable.minimap_room);
 
         setOnTouchListener(new OnTouchListener() {
             @Override
@@ -139,6 +137,7 @@ public class MiniMap extends View {
 
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        //noinspection SuspiciousNameCombination This is square form support logic
         super.onMeasure(widthMeasureSpec, widthMeasureSpec);
     }
 

@@ -6,9 +6,6 @@ import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.ImageProvider
 
 import java.util.Map;
 
-/**
- * Created by sergey on 9/26/15.
- */
 abstract public class DeviceDisplay extends DeviceAbstract {
 
     private ImageProvider mImageProvider;

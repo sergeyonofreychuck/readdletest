@@ -4,9 +4,6 @@ import android.graphics.Rect;
 
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.RoomCoordinates;
 
-/**
- * Created by sergey on 9/26/15.
- */
 class MiniMapCoordinatesTranslator {
 
     private Rect mClipBounds;

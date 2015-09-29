@@ -19,9 +19,6 @@ import com.test.readdle.sergey.onofreychuck.readdletestapp.widgets.MiniMap;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by sergey on 9/27/15.
- */
 public class LevelSetupFragment extends Fragment {
 
     private ConfigurationChangedListener mConfigurationChangedListener;
@@ -77,6 +74,7 @@ public class LevelSetupFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        //noinspection ConstantConditions In this aplication this code cant be invoked in detached state
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         menu.clear();
     }

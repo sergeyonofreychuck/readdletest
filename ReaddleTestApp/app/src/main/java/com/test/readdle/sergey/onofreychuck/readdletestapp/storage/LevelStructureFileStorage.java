@@ -13,9 +13,6 @@ import com.test.readdle.sergey.onofreychuck.readdletestapp.level.RoomCoordinates
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by sergey on 9/27/15.
- */
 public class LevelStructureFileStorage implements LevelStructureStorage {
 
     private static final String ID_PREFIX = "LevelStructure";
@@ -44,9 +41,10 @@ public class LevelStructureFileStorage implements LevelStructureStorage {
             throw new IllegalArgumentException("coordinates");
         }
 
+        @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument. Will not cause performance issues")
         final boolean success = mPreferences.edit().putString(
                 getPreferencesKey(id),
-                new Gson().toJson(coordinates.toArray(new RoomCoordinates[0]))
+                new Gson().toJson(coordinates.toArray(new RoomCoordinates[coordinates.size()]))
         ).commit();
 
         mHandler.post(new Runnable() {

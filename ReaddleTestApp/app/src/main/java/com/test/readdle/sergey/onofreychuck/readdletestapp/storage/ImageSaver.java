@@ -5,9 +5,6 @@ import com.test.readdle.sergey.onofreychuck.readdletestapp.level.RoomCoordinates
 
 import java.io.File;
 
-/**
- * Created by sergey on 9/26/15.
- */
 public interface ImageSaver {
     void saveImage(File imageFile, RoomCoordinates coordinates, Direction direction, SaveImageCallback callback);
 

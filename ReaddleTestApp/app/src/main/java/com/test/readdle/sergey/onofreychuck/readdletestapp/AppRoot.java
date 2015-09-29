@@ -4,16 +4,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.RoomCoordinates;
 
 import java.util.List;
 
-/**
- * Created by sergey on 9/27/15.
- */
 public class AppRoot extends AppCompatActivity implements ConfigurationChangedListener {
 
     @Override

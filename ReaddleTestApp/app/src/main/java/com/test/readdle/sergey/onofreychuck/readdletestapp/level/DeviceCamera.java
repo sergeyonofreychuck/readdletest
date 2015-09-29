@@ -16,9 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-/**
- * Created by sergey on 9/26/15.
- */
 public class DeviceCamera extends DeviceAbstract {
 
     private ImageSaver mImageSaver;
@@ -64,7 +61,10 @@ public class DeviceCamera extends DeviceAbstract {
         mImageSaver.saveImage(imageTempFile, getRoom().getCoordinates(), getDirection(), new ImageSaver.SaveImageCallback() {
             @Override
             public void success() {
-                mImageFiles.get(fileId).delete(); //TODO handle false value
+                if (!mImageFiles.get(fileId).delete()){
+                    throw new RuntimeException("cant remove temp file");
+                    //TODO add error handling
+                }
                 mImageFiles.remove(fileId);
             }
 
