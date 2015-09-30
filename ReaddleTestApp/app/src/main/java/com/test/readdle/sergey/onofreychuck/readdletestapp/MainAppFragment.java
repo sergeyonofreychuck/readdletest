@@ -22,9 +22,11 @@ import com.test.readdle.sergey.onofreychuck.readdletestapp.level.Room;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.RoomCoordinates;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.FilesImageProvider;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.FilesImageSaver;
+import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.FilesImagesStorageFactory;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.ImageFileNameProvider;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.ImageProvider;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.ImageSaver;
+import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.ImagesStorageFactory;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.LevelStructureFileStorage;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.LevelStructureStorage;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.widgets.MiniMap;
@@ -41,12 +43,22 @@ public class MainAppFragment extends Fragment {
     private ImageView mImageViewDisplay;
     private MiniMap mMiniMap;
 
+    private ImageProvider mImageProvider;
+    private ImageSaver mImageSaver;
+
     public MainAppFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        @SuppressWarnings({"In this aaplication this code cant be invoked in detached state", "ConstantConditions"})
+        ImagesStorageFactory factory = new FilesImagesStorageFactory(
+                getContext().getExternalFilesDir(android.os.Environment.DIRECTORY_PICTURES));
+
+        mImageProvider = factory.createImageProvider();
+        mImageSaver = factory.createImageSaver();
 
         setHasOptionsMenu(true);
     }
@@ -132,29 +144,23 @@ public class MainAppFragment extends Fragment {
         icons.put(Direction.WEST, BitmapFactory.decodeResource(getResources(), R.drawable.arrow_west));
         icons.put(Direction.NORTH, BitmapFactory.decodeResource(getResources(), R.drawable.arrow_noth));
 
-        @SuppressWarnings({"In this aaplication this code cant be invoked in detached state", "ConstantConditions"})
-        ImageFileNameProvider imageFileNameProvider =
-                new ImageFileNameProvider(getContext().getExternalFilesDir(android.os.Environment.DIRECTORY_PICTURES).getAbsolutePath());
+        initializeDisplay(startRoom, startDirection, icons);
 
-        initializeDisplay(startRoom, startDirection, imageFileNameProvider, icons);
-
-        initializeCamera(startRoom, startDirection, imageFileNameProvider, icons);
+        initializeCamera(startRoom, startDirection, icons);
     }
 
     private void initializeDisplay(
             Room room,
             Direction startDirection,
-            ImageFileNameProvider imageFileNameProvider,
             Map<Direction, Bitmap> icons) {
-        Bitmap defaultImage = BitmapFactory.decodeResource(getResources(), R.drawable.no_image_available);
 
-        ImageProvider imageProvider = new FilesImageProvider(imageFileNameProvider);
+        Bitmap defaultImage = BitmapFactory.decodeResource(getResources(), R.drawable.no_image_available);
 
         mDisplay = new DeviceDisplay(
                 room,
                 startDirection,
                 icons,
-                imageProvider,
+                mImageProvider,
                 defaultImage) {
 
             @Override
@@ -170,15 +176,14 @@ public class MainAppFragment extends Fragment {
     private void initializeCamera(
             Room room,
             Direction startDirection,
-            ImageFileNameProvider imageFileNameProvider,
             Map<Direction, Bitmap> icons) {
-        ImageSaver imageSaver = new FilesImageSaver(imageFileNameProvider);
+
         mCamera = new DeviceCamera(
                 this,
                 room,
                 startDirection,
                 icons,
-                imageSaver,
+                mImageSaver,
                 new DeviceCamera.ImageSavedCallback() {
             @Override
             public void imageSaved() {
@@ -187,6 +192,7 @@ public class MainAppFragment extends Fragment {
         });
     }
 
+    @SuppressWarnings({"In this aaplication this code cant be invoked in detached state", "ConstantConditions"})
     private void setButtonsEnabled(boolean enabled){
         getView().findViewById(R.id.btn_forward).setEnabled(enabled);
         getView().findViewById(R.id.btn_turn_left).setEnabled(enabled);

@@ -1,7 +1,5 @@
 package com.test.readdle.sergey.onofreychuck.readdletestapp.storage;
 
-import android.text.TextUtils;
-
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.Direction;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.RoomCoordinates;
 
@@ -11,15 +9,15 @@ public class ImageFileNameProvider {
 
     private File mDestinationDirectory;
 
-    public ImageFileNameProvider(String path) {
-        if (TextUtils.isEmpty(path)) {
-            throw new IllegalArgumentException("path");
+    public ImageFileNameProvider(File destinationDirectory) {
+        if (destinationDirectory == null) {
+            throw new IllegalArgumentException("destinationDirectory");
+        }
+        if (!destinationDirectory.exists()) {
+            throw new IllegalArgumentException("destination directory not exists");
         }
 
-        mDestinationDirectory = new File(path);
-        if (!mDestinationDirectory.exists()) {
-            throw new IllegalArgumentException("destination path not exists " + path);
-        }
+        mDestinationDirectory = destinationDirectory;
     }
 
     public File getImageFile(RoomCoordinates coordinates, Direction direction) {

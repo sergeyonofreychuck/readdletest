@@ -19,7 +19,7 @@ public class FilesImageSaver implements ImageSaver {
 
     private ImageFileNameProvider mFileNameProvider;
 
-    public FilesImageSaver(ImageFileNameProvider fileNameProvider) {
+    FilesImageSaver(ImageFileNameProvider fileNameProvider) {
         if (fileNameProvider == null) {
             throw new IllegalArgumentException("fileNameProvider");
         }

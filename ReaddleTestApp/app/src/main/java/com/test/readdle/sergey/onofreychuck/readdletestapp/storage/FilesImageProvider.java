@@ -16,7 +16,7 @@ public class FilesImageProvider implements ImageProvider {
 
     private ImageFileNameProvider mFileNameProvider;
 
-    public FilesImageProvider(ImageFileNameProvider fileNameProvider) {
+    FilesImageProvider(ImageFileNameProvider fileNameProvider) {
         if (fileNameProvider == null) {
             throw new IllegalArgumentException("fileNameProvider");
         }
