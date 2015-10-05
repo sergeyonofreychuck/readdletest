@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.DeviceCamera;
@@ -20,10 +21,7 @@ import com.test.readdle.sergey.onofreychuck.readdletestapp.level.Direction;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.Level;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.Room;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.level.RoomCoordinates;
-import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.FilesImageProvider;
-import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.FilesImageSaver;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.FilesImagesStorageFactory;
-import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.ImageFileNameProvider;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.ImageProvider;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.ImageSaver;
 import com.test.readdle.sergey.onofreychuck.readdletestapp.storage.ImagesStorageFactory;
@@ -36,12 +34,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class MainAppFragment extends Fragment {
 
     private DeviceDisplay mDisplay;
     private DeviceCamera mCamera;
+
+    @Bind(R.id.img_display)
     private ImageView mImageViewDisplay;
+
+    @Bind(R.id.img_display)
     private MiniMap mMiniMap;
+
+    @Bind(R.id.btn_forward)
+    private Button mBtnStepForward;
+
+    @Bind(R.id.btn_turn_left)
+    private Button mBtnTurnLeft;
+
+    @Bind(R.id.btn_turn_right)
+    private Button mBtnTurnRight;
+
+    @Bind(R.id.btn_loadImage)
+    private Button mBtnLoadImage;
 
     private ImageProvider mImageProvider;
     private ImageSaver mImageSaver;
@@ -68,22 +86,19 @@ public class MainAppFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.main_app, container, false);
 
-        mMiniMap = (MiniMap) rootView.findViewById(R.id.mini_map);
-        mMiniMap.initGrid(Globals.LEVEL_X_DIMENSION, Globals.LEVEL_Y_DIMENSION);
+        ButterKnife.bind(this, rootView);
 
-        mImageViewDisplay = (ImageView)rootView.findViewById(R.id.img_display);
+        mMiniMap.initGrid(Globals.LEVEL_X_DIMENSION, Globals.LEVEL_Y_DIMENSION);
 
         new LevelStructureFileStorage(getContext()).load(Globals.LEVEL_SAVE_KEY, new LevelStructureStorage.LoadCallback() {
             @Override
             public void success(List<RoomCoordinates> coordinates) {
                 onConfigurationChanged(coordinates);
-                initializeButtonsListeners(rootView);
             }
 
             @Override
             public void failed() {
                 onConfigurationChanged(new ArrayList<RoomCoordinates>());
-                initializeButtonsListeners(rootView);
             }
         });
         return rootView;
@@ -192,44 +207,33 @@ public class MainAppFragment extends Fragment {
         });
     }
 
-    @SuppressWarnings({"In this aaplication this code cant be invoked in detached state", "ConstantConditions"})
     private void setButtonsEnabled(boolean enabled){
-        getView().findViewById(R.id.btn_forward).setEnabled(enabled);
-        getView().findViewById(R.id.btn_turn_left).setEnabled(enabled);
-        getView().findViewById(R.id.btn_turn_right).setEnabled(enabled);
-        getView().findViewById(R.id.btn_loadImage).setEnabled(enabled);
+        mBtnStepForward.setEnabled(enabled);
+        mBtnTurnLeft.setEnabled(enabled);
+        mBtnTurnRight.setEnabled(enabled);
+        mBtnLoadImage.setEnabled(enabled);
     }
 
-    private void initializeButtonsListeners(View rootView) {
-        rootView.findViewById(R.id.btn_forward).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mDisplay.canDoStepForward()){
-                    mDisplay.stepForward();
-                }
-            }
-        });
+    @OnClick(R.id.btn_forward)
+    private void stepForwardBtnClick() {
+        if (mDisplay.canDoStepForward()){
+            mDisplay.stepForward();
+        }
+    }
 
-        rootView.findViewById(R.id.btn_turn_left).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDisplay.turnLeft();
-            }
-        });
+    @OnClick(R.id.btn_turn_left)
+    private void turnLeftBtnClick() {
+        mDisplay.turnLeft();
+    }
 
-        rootView.findViewById(R.id.btn_turn_right).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDisplay.turnRight();
-            }
-        });
+    @OnClick(R.id.btn_turn_right)
+    private void turnRightBtnClick() {
+        mDisplay.turnRight();
+    }
 
-        rootView.findViewById(R.id.btn_loadImage).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCamera.moveTo(mDisplay);
-                mCamera.makePhoto();
-            }
-        });
+    @OnClick(R.id.btn_loadImage)
+    private void btnLoadImageClick() {
+        mCamera.moveTo(mDisplay);
+        mCamera.makePhoto();
     }
 }
