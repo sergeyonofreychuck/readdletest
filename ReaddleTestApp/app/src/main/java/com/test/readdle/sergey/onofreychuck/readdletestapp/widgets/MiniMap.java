@@ -1,5 +1,8 @@
 package com.test.readdle.sergey.onofreychuck.readdletestapp.widgets;
 
+import android.animation.FloatEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -26,6 +29,7 @@ public class MiniMap extends View {
 
     private static final String TAG = "MiniMap";
 
+    private int SCALE_ANIMATION_LENGTH = 200;
     private int mRows;
     private int mColumns;
     private List<RoomCoordinates> mRooms;
@@ -35,6 +39,9 @@ public class MiniMap extends View {
     private Rect mClipBounds;
     private float mTrackableScaleX = 0;
     private float mTrackableScaleY = 0;
+
+    private float mAnimationScale;
+    private RoomCoordinates mAnimatedCoordinates;
 
     private MiniMapCoordinatesTranslator mTranslator;
 
@@ -61,13 +68,32 @@ public class MiniMap extends View {
             public boolean onTouch(View v, MotionEvent event) {
                 if ((event.getAction() & MotionEvent.ACTION_UP) == MotionEvent.ACTION_UP) {
                     if (mOnTouchListener != null) {
-                        mOnTouchListener.onTouch(mTranslator.getTouchCoordinates((int) event.getX(), (int) event.getY()));
+                        RoomCoordinates coordinates = mTranslator.getTouchCoordinates((int) event.getX(), (int) event.getY());
+                        animateOnTouch(coordinates);
+                        mOnTouchListener.onTouch(coordinates);
                     }
                     return false;
                 }
                 return true;
             }
         });
+    }
+
+    private void animateOnTouch(RoomCoordinates coordinates) {
+        mAnimatedCoordinates = coordinates;
+
+        ValueAnimator anim=new ValueAnimator();
+        anim.setDuration(SCALE_ANIMATION_LENGTH);
+        anim.setObjectValues(0.0f, 1.0f);
+        anim.setEvaluator(new FloatEvaluator());
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                mAnimationScale = (Float)animation.getAnimatedValue();
+                invalidate();
+            }
+        });
+        anim.start();
     }
 
     @SuppressWarnings("rows and columns can take different values in future releases")
@@ -123,9 +149,8 @@ public class MiniMap extends View {
         }
 
         for (RoomCoordinates coordinates : mRooms){
-            Rect currentCellBounds = mTranslator.getBounds(coordinates.getX(), coordinates.getY());
-
             if (mTrackedObject != null && coordinates.equals(mTrackedObject.getRoom().getCoordinates())) {
+                Rect currentCellBounds = mTranslator.getBounds(coordinates.getX(), coordinates.getY());
                 Bitmap icon = mTrackedObject.getIcon();
 
                 if (mTrackableScaleX == 0f || mTrackableScaleY == 0f) {
@@ -138,8 +163,18 @@ public class MiniMap extends View {
 
                 canvas.drawBitmap(icon, transformMatrix, null);
             } else {
-                mRoomDrawable.setBounds(mTranslator.getBounds(coordinates.getX(), coordinates.getY()));
+                Rect bounds = mTranslator.getBounds(coordinates.getX(), coordinates.getY(),
+                        coordinates.equals(mAnimatedCoordinates) ? mAnimationScale: 1f);
+                mRoomDrawable.setBounds(bounds);
                 mRoomDrawable.draw(canvas);
+            }
+        }
+        if (mAnimatedCoordinates != null && !mRooms.contains(mAnimatedCoordinates)){
+            Rect bounds = mTranslator.getBounds(mAnimatedCoordinates.getX(), mAnimatedCoordinates.getY(), 1f-mAnimationScale);
+            mRoomDrawable.setBounds(bounds);
+            mRoomDrawable.draw(canvas);
+            if (mAnimationScale == 1f) {
+                mAnimatedCoordinates = null;
             }
         }
     }

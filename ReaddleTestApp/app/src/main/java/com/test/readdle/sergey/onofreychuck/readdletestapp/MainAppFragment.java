@@ -44,22 +44,22 @@ public class MainAppFragment extends Fragment {
     private DeviceCamera mCamera;
 
     @Bind(R.id.img_display)
-    private ImageView mImageViewDisplay;
+    ImageView mImageViewDisplay;
 
-    @Bind(R.id.img_display)
-    private MiniMap mMiniMap;
+    @Bind(R.id.mini_map)
+    MiniMap mMiniMap;
 
     @Bind(R.id.btn_forward)
-    private Button mBtnStepForward;
+    Button mBtnStepForward;
 
     @Bind(R.id.btn_turn_left)
-    private Button mBtnTurnLeft;
+    Button mBtnTurnLeft;
 
     @Bind(R.id.btn_turn_right)
-    private Button mBtnTurnRight;
+    Button mBtnTurnRight;
 
     @Bind(R.id.btn_loadImage)
-    private Button mBtnLoadImage;
+    Button mBtnLoadImage;
 
     private ImageProvider mImageProvider;
     private ImageSaver mImageSaver;
@@ -215,24 +215,24 @@ public class MainAppFragment extends Fragment {
     }
 
     @OnClick(R.id.btn_forward)
-    private void stepForwardBtnClick() {
+    void stepForwardBtnClick() {
         if (mDisplay.canDoStepForward()){
             mDisplay.stepForward();
         }
     }
 
     @OnClick(R.id.btn_turn_left)
-    private void turnLeftBtnClick() {
+    void turnLeftBtnClick() {
         mDisplay.turnLeft();
     }
 
     @OnClick(R.id.btn_turn_right)
-    private void turnRightBtnClick() {
+    void turnRightBtnClick() {
         mDisplay.turnRight();
     }
 
     @OnClick(R.id.btn_loadImage)
-    private void btnLoadImageClick() {
+    void btnLoadImageClick() {
         mCamera.moveTo(mDisplay);
         mCamera.makePhoto();
     }

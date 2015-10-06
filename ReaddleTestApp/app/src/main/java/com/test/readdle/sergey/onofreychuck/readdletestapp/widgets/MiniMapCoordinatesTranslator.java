@@ -23,12 +23,23 @@ class MiniMapCoordinatesTranslator {
     }
 
     public Rect getBounds(int x, int y) {
-        int left = (int)(mClipBounds.left + x * mCellWidth);
-        int right = (int)(left + mCellWidth);
-        int top = (int)(mClipBounds.top + y * mCellHeight);
-        int bottom = (int)(top + mCellHeight);
+        return getBounds(x, y, 1);
+    }
 
-        return new Rect(left, top, right, bottom);
+    public Rect getBounds(int x, int y, float scale) {
+        float width = mCellWidth * scale;
+        float height = mCellWidth * scale;
+
+        float top = mClipBounds.top + y * mCellHeight;
+        top += (mCellHeight - height)/2;
+
+        float left = mClipBounds.left + x * mCellWidth;
+        left += (mCellWidth - width)/2;
+
+        int bottom = (int)(top + height);
+        int right = (int)(left + width);
+
+        return new Rect((int)left, (int)top, right, bottom);
     }
 
     public RoomCoordinates getTouchCoordinates(int x, int y){
