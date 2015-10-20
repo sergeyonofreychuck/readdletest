@@ -53,6 +53,7 @@ public class AppRoot extends AppCompatActivity implements ConfigurationChangedLi
     private void switchToLevelSetupFragment() {
         LevelSetupFragment levelSetupFragment = new LevelSetupFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_left, R.anim.slide_in_left, R.anim.slide_in_right);
         ft.add(R.id.root_container, levelSetupFragment);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.addToBackStack(null);
